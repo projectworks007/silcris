@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SILCRIS – Sminktetoválás & Smink · Szeged</title>
+<meta name="description" content="SILCRIS – Szántai Szilvia sminkes és sminktetováló Szegeden. Púder szemöldök, ajak- és szemhéjtetoválás, lézeres eltávolítás, alkalmi és menyasszonyi smink. Természetes hatás, precíz munka.">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SILCRIS – Sminktetoválás &amp; Smink · Szeged">
+<meta property="og:description" content="Szántai Szilvia sminkes és sminktetováló. Púder szemöldök, ajak- és szemhéjtetoválás, lézeres eltávolítás, smink.">
+<!-- Élesítéskor az og:image legyen abszolút URL (pl. https://sajatdomain.hu/images/og.jpg) -->
+<meta property="og:image" content="images/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="images/logo.png"><!-- az intró-medál képe azonnal kelljen -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Parisienne&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* VILÁGOS TÉMA – az arculat valódi hangulata (mint az utalványán/névjegyén):
+       krémfehér alap + antik arany + púderrózsa + bazsarózsa. Nincs sötétzöld.
+       A régi „moss/cream" változónevek MEGMARADNAK, csak világos értéket kapnak,
+       így a meglévő szabályok automatikusan átfordulnak. */
+    --moss:#F4EDDF;        /* meleg krém – ALAP háttér */
+    --moss-2:#ECE1CE;      /* mélyebb krém – emelt felület (lábléc, tálcák) */
+    --moss-3:#FBF6EC;      /* leheletnyi krém – kártya */
+    --gold:#A9833C;        /* antik arany – krémen is olvasható */
+    --gold-soft:rgba(169,131,60,.34);
+    --rose:#B06A75;        /* púder rózsa (mélyebb – krémen is eléri az AA-t) */
+    --cream:#35302A;       /* SÖTÉT tinta szöveg világos alapon */
+    --cream-dim:#645B4E;   /* halványabb szöveg – a mélyebb krémen is AA (≥4.5) */
+    --on-gold:#332912;     /* sötét szöveg ARANY gombokon */
+    --cta-h:60px;          /* ragadós mobil CTA magassága */
+    /* aliasok (a világos-szekció szabályokhoz, hogy ne törjenek) */
+    --cream-bg:#F4EDDF;
+    --cream-card:#FBF6EC;
+    --ink:#35302A;
+    --ink-dim:#645B4E;
+    --gold-deep:#7E5D24;
+    --forest:#EBE2D0;      /* halványan mélyebb krém – a váltakozó szekciók finom ritmusához */
+    --forest-2:#F3EDE1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;scroll-padding-top:84px;scrollbar-gutter:stable;}
+  body{
+    font-family:'Jost',sans-serif;font-weight:300;
+    background:var(--moss);color:var(--cream);
+    line-height:1.65;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative; /* a lap-keret ehhez (a teljes dokumentumhoz) igazodik */
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  /* ---------- Skip-link ---------- */
+  .skip-link{
+    position:absolute;left:-9999px;top:16px;z-index:100;
+    background:var(--gold);color:var(--on-gold);text-decoration:none;
+    font-family:'Jost',sans-serif;font-weight:500;font-size:13px;
+    letter-spacing:.14em;text-transform:uppercase;padding:12px 22px;
+  }
+  .skip-link:focus{left:16px;}
+  /* csak képernyőolvasónak (vizuálisan rejtett) – pl. szekció-címsor a láblécben */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+  .wrap{max-width:1060px;margin:0 auto;padding:0 22px;}
+
+  /* ---------- Fejléc ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:55; /* a fix arany keret (z:50) fölött, hogy a lenyíló menüt ne húzza át */
+    display:flex;align-items:center;justify-content:center; /* menü középre igazítva (nincs logó a fejlécben) */
+    padding:15px 26px;
+    padding-left:max(26px,env(safe-area-inset-left,0px));
+    padding-right:max(26px,env(safe-area-inset-right,0px));
+    background:linear-gradient(180deg, rgba(244,237,223,.88), rgba(244,237,223,0)); /* lágy krém-scrim az olvashatóságért */
+    pointer-events:none; /* a scrim ne fogjon kattintást; a gyerekek visszakapják */
+    transition:background .3s ease, box-shadow .3s ease, opacity .55s ease;
+  }
+  /* Görgetéskor TÖMÖR krém háttér – hogy a felgörgő tartalom NE üssön át az átlátszó menün */
+  .topbar.solid{
+    background:#F4EDDF; /* teljesen átlátszatlan krém → a felgörgő tartalom SEMMIT nem üt át */
+    box-shadow:0 6px 22px rgba(53,48,42,.14);
+    border-bottom:1px solid rgba(169,131,60,.22);
+  }
+  .topbar > *{pointer-events:auto;}
+  /* ✍️ KÉZJEGY: görgetéskor balra beúszik a „Szántai Szilvia" kézírás, és egy arany
+     tinta-csillanás fut végig rajta – mintha épp aláírná a munkáját. */
+  .brand-sign{
+    position:absolute;top:50%;left:max(26px,env(safe-area-inset-left,0px));
+    font-family:'Parisienne',cursive;font-size:22px;line-height:1;color:var(--gold);
+    white-space:nowrap;pointer-events:none;
+    opacity:0;transform:translateY(-50%) translateX(-10px);
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  .topbar.solid .brand-sign{opacity:1;transform:translateY(-50%) translateX(0);
+    text-shadow:0 0 9px rgba(169,131,60,.38), 0 0 2px rgba(201,155,74,.45);} /* enyhe arany derengés, míg görgetésnél látszik */
+  /* az arany fény, ami finoman, lassan végigsöpör az aláíráson – enyhe, fényes csillogás (nem pulzálás!) */
+  .brand-sign::after{
+    content:"Szántai Szilvia";position:absolute;left:0;top:0;pointer-events:none;
+    background:linear-gradient(100deg,transparent 42%,rgba(255,249,230,.9) 50%,transparent 58%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    background-size:250% 100%;background-position:180% 0;
+  }
+  /* söpör, majd pihen; a fény a 40%-nál ÉR AZ UTOLSÓ BETŰRE (bg-pos 16,67% = a fény a szöveg jobb szélén, S=2.5-ből) – ez a horgony */
+  .topbar.solid .brand-sign::after{animation:signSheen 4.5s ease-in-out .3s infinite;}
+  @keyframes signSheen{
+    0%  {background-position:100% 0;}    /* a fény még az első betű ELŐTT – láthatatlan */
+    40% {background-position:16.67% 0;}  /* a fény AZ UTOLSÓ betűn („a") – a csillag IS itt villan (40%) */
+    55% {background-position:-25% 0;}    /* továbbsiklott az utolsó betű mögé – láthatatlan */
+    100%{background-position:-25% 0;}    /* pihen a ciklus végéig */
+  }
+  /* ✦ a söprés VÉGÉN egy fényes CSILLAG-BURST (valódi SVG, sok sugár) villan az utolsó „a" csücskén */
+  .sign-star{
+    position:absolute;right:-11px;top:-4px;width:28px;height:28px;
+    opacity:0;transform:scale(.35);transform-origin:50% 50%;
+    pointer-events:none;overflow:visible;
+    /* arany glória+szegély → a fehér csillag ELÜT a világos krémtől (sötétebb a krémnél) */
+    filter:drop-shadow(0 0 1.2px rgba(150,106,42,.9)) drop-shadow(0 0 2.8px rgba(201,155,74,.45));
+  }
+  .topbar.solid .sign-star{animation:signStar 4.5s ease-in-out .3s infinite;}
+  @keyframes signStar{
+    0%,37%{opacity:0;transform:scale(.6) rotate(0deg);}    /* SÖTÉT, míg a fény a betűkön halad → NINCS elő-csillanás */
+    45%{opacity:.8;transform:scale(1) rotate(14deg);}      /* CSÚCS a söprés VÉGÉN – a fény EKKOR hagyja el az utolsó betűt (picit halványabb) */
+    96%{opacity:0;transform:scale(.82) rotate(38deg);}     /* NAGYON lassú, elnyújtott leúszás (~2,3s a 4,5s cikluson) */
+    100%{opacity:0;transform:scale(.6) rotate(0deg);}      /* pihen */
+  }
+  /* a köztes desktop-sávban (a menü szinte teljes szélességű) elrejtjük, hogy ne ütközzön */
+  @media(min-width:820px) and (max-width:1179.98px){.brand-sign{display:none;}}
+
+  /* ============ INTRÓ: medál-logó szétnyílik → kifut a tartalom → a hero nagy logójába simul ============ */
+  #intro{display:none;}
+  .js-intro #intro{
+    display:grid;place-items:center;position:fixed;inset:0;z-index:200;
+    background:var(--moss);
+    transition:background .8s ease;
+  }
+  .js-intro #intro.reveal{background:transparent;} /* fátyol el – de az overlay a landolásig fogja a kattintást,
+    hogy a dokkolás-célpont ne mozdulhasson el (a tartalom addig inert is) */
+  .js-intro #intro.land{pointer-events:none;}
+  .js-intro #intro.done{opacity:0;visibility:hidden;
+    transition:opacity .4s ease, visibility 0s linear .4s;}
+  /* a medál – EGYETLEN ÉP logó (a monogramot SOHA nem vágjuk ketté) */
+  #intro .dock-wrap{position:relative;will-change:transform;}
+  #intro .locket{
+    position:relative;width:min(66vw,360px);height:min(66vw,360px);
+    opacity:0;transform:scale(.55);will-change:transform;
+    /* megjelenés finom TÚLLÖVÉSSEL, majd megüléssel (anticipáció + follow-through) */
+    transition:opacity .5s ease, transform .62s cubic-bezier(.34,1.42,.6,1);
+  }
+  #intro.enter .locket{opacity:1;transform:scale(1);}
+  #intro .locket-img{
+    display:block;width:100%;height:100%;object-fit:contain;position:relative;z-index:1;
+    filter:drop-shadow(0 12px 34px rgba(0,0,0,.55));
+  }
+  /* ✦ FÉNY-LÉLEGZÉS: a szétnyílás HELYETT a monogram közepéből arany fény dagad ki */
+  #intro .bloom{
+    position:absolute;left:50%;top:50%;width:160%;height:160%;z-index:0;
+    transform:translate(-50%,-50%) scale(.42);border-radius:50%;
+    pointer-events:none;opacity:0;
+    background:radial-gradient(circle,
+      rgba(255,250,236,.95) 0%, rgba(248,222,152,.62) 24%,
+      rgba(228,188,110,.30) 44%, transparent 68%);
+  }
+  #intro.bloom-go .bloom{animation:introBloom 1.15s cubic-bezier(.3,.5,.35,1) both;}
+  @keyframes introBloom{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.42);}
+    38%{opacity:.9;}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(2.15);}
+  }
+  /* ÍVELT DOKKOLÁS: a VÍZSZINTES mozgás a wrap-en, a FÜGGŐLEGES+zsugorodás a locketen –
+     a két tengely eltérő időzítése természetes, kézzel-vetett röppályát ad (nem egyenes) */
+  #intro.dock .dock-wrap{
+    transform:translateX(var(--dockX,0px));
+    transition:transform .8s cubic-bezier(.5,0,.5,1);
+  }
+  #intro.dock .locket{
+    transform:translateY(var(--dockY,-24vh)) scale(var(--dockS,.8));
+    transition:transform .8s cubic-bezier(.28,.6,.3,1);
+  }
+  #intro.land .locket{ /* megérkezett: keresztfade a valódi logóval – sosincs két logó */
+    opacity:0;
+    transition:transform .8s cubic-bezier(.28,.6,.3,1), opacity .45s ease;
+  }
+  /* a tartalom + fejléc állapota az intró alatt – a tartalom a MEDÁL pozíciójából nő ki */
+  /* A tartalom CSAK a logó landolásakor tárul fel (nem a repülés előtt) – így a nagy medál
+     sosem takarja a szöveget. Csak opacity (nincs scale/translate), hogy a dokk-célpont
+     mérése pontos maradjon, amíg a tartalom rejtve, de a helyén van. */
+  #tartalom{transition:opacity .85s ease;}
+  .intro-hide-main #tartalom{opacity:0;}
+  /* a hero SAJÁT nagy logója a medál MEGÉRKEZÉSÉIG rejtve – ekkor keresztfade-del veszi át a helyét */
+  .js-intro:not(.intro-done) .hero-logo{opacity:0 !important;}
+  /* landolás-súly: megérkezéskor a logó finom túllövéssel „beül" (nem csak megjelenik).
+     Az opacity:.98 kell, mert a logoSettle kiváltja az emblem-animációt (ami eddig láthatóvá tette);
+     a keresztfade-et a .hero-logo meglévő transition:opacity .45s adja. */
+  .js-intro.intro-done .hero-logo{opacity:.98;animation:logoSettle .55s cubic-bezier(.34,1.5,.5,1) both;}
+  @keyframes logoSettle{0%{transform:scale(1.055);}55%{transform:scale(.986);}100%{transform:scale(1);}}
+  .intro-hide-header .topbar{opacity:0;pointer-events:none;}
+  .intro-lock{overflow:hidden;}                                    /* intró alatt nincs görgetés */
+  .topnav{display:none;gap:30px;}
+  .topnav a{
+    text-decoration:none;font-size:13px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--cream-dim);transition:color .2s;padding:12px 0;
+  }
+  .topnav a:hover{color:var(--gold);}
+  @media(min-width:820px){.topnav{display:flex;}}
+
+  /* ---------- Mobil hamburger menü ---------- */
+  .nav-toggle{
+    display:none;flex-direction:column;justify-content:center;gap:5px;
+    width:44px;height:44px;padding:0 11px;cursor:pointer;
+    background:transparent;border:1px solid var(--gold-soft);
+  }
+  .nav-toggle span{
+    display:block;height:1px;background:var(--cream);
+    transition:transform .25s ease,opacity .25s ease;
+  }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+  .mobile-nav{
+    display:none;position:absolute;top:100%;left:0;right:0;
+    max-height:calc(100vh - 100px - var(--cta-h) - env(safe-area-inset-bottom));  /* fallback */
+    max-height:calc(100dvh - 100px - var(--cta-h) - env(safe-area-inset-bottom));
+    overflow-y:auto; /* fekvő telefonon is elérhető minden menüpont */
+    flex-direction:column;padding:8px 26px 16px;
+    background:#FBF6EC;border-top:1px solid rgba(169,131,60,.20);
+    border-bottom:1px solid var(--gold-soft);
+    box-shadow:0 14px 30px rgba(53,48,42,.18);
+  }
+  .mobile-nav a{
+    text-decoration:none;font-family:'Jost',sans-serif;font-size:13px;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--cream);
+    padding:14px 0;border-bottom:1px solid rgba(198,161,91,.14);
+    transition:color .2s;
+  }
+  .mobile-nav a:last-child{border-bottom:none;}
+  .mobile-nav a:hover{color:var(--gold);}
+  @media(max-width:819.98px){
+    .topbar{justify-content:flex-end;} /* hamburger jobbra */
+    .nav-toggle{display:flex;}
+    .mobile-nav.open{display:flex;}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;   /* fallback régi böngészőknek */
+    min-height:100svh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;overflow:hidden;
+    padding:110px 22px 90px; /* fallback */
+    padding:clamp(48px,7svh,110px) 22px clamp(20px,4svh,90px); /* a hajtás fölé férjen minden */
+  }
+  .hero-bg-pic{display:contents;} /* a <picture> ne legyen doboz: az img közvetlenül a hero-hoz pozicionál */
+  .hero-bg{
+    position:absolute;inset:0;z-index:0;
+    width:100%;height:100%;object-fit:cover;opacity:var(--herobg-op,.42);
+    filter:saturate(.92) brightness(1.06);
+  }
+  /* VILÁGOS hero-fátyol: krém-lehelet a bazsarózsán, hogy pasztell/légies legyen
+     és a sötét szöveg olvasható maradjon (a szélek felé teljesen krémbe olvad) */
+  .hero::before{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:
+      radial-gradient(95% 70% at 50% 40%, rgba(244,237,223,.35) 0%, rgba(244,237,223,.70) 62%, var(--moss) 100%),
+      linear-gradient(180deg, rgba(244,237,223,.30), rgba(244,237,223,.20) 40%, var(--moss) 97%);
+  }
+  .hero > *:not(.hero-bg):not(.sparkles){position:relative;z-index:2;}
+  .hero-rose{width:88px;height:auto;margin-bottom:26px;opacity:.95;}
+  .hero-rose path{
+    fill:none;stroke:var(--gold);stroke-width:1.4;stroke-linecap:round;
+    stroke-dasharray:900;stroke-dashoffset:900;
+    animation:draw 2.6s ease forwards .3s;
+  }
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .hero-logo{
+    width:clamp(220px,40vw,340px); /* fallback */
+    width:min(40vw,27svh,340px);   /* a képernyő magasságához igazodik */
+    height:auto;object-fit:contain;
+    margin-bottom:14px;margin-bottom:clamp(2px,1svh,14px);
+    filter:drop-shadow(0 8px 24px rgba(0,0,0,.45));
+    animation:emblem 1.4s ease forwards .2s;opacity:0;transform:scale(.9);
+    transition:opacity .45s ease; /* a medál landolásakor gyors keresztfade */
+  }
+  @keyframes emblem{to{opacity:.98;transform:scale(1);}}
+  /* ✨ Logó-csillanás a landoláskor: a fénysöprést MAGA A LOGÓ maszkolja, így a fény
+     kizárólag az arany vonalakon fut végig (monogram, körfelirat, hullámvonal) –
+     mint ékszeren a megcsillanó fény. Mögötte leheletnyi arany aura lüktet egyet. */
+  .logo-wrap{position:relative;display:block;}
+  .logo-shine{
+    position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;opacity:0;
+    transition:opacity .3s ease;   /* a .play réteg lágyan úszik be, nem pattan (tetőre-visszatéréskor is) */
+    overflow:hidden;
+    /* a maszk STATIKUS (csak kiszabja a logó vonalait) – a fény alatta transformmal
+       mozog, GPU-n kompozitálva → nem darabos (background-position-animáció volt az) */
+    -webkit-mask-image:url(images/logo.png);-webkit-mask-size:contain;
+    -webkit-mask-repeat:no-repeat;-webkit-mask-position:center;
+    mask-image:url(images/logo.png);mask-size:contain;
+    mask-repeat:no-repeat;mask-position:center;
+  }
+  .logo-shine::before{
+    content:"";position:absolute;top:-25%;bottom:-25%;left:0;width:55%;
+    transform:translateX(-140%) skewX(-18deg);
+    background:linear-gradient(90deg,
+      transparent,
+      rgba(255,246,222,.6) 30%,
+      rgba(255,255,255,.98) 50%,
+      rgba(255,246,222,.6) 70%,
+      transparent);
+    will-change:transform;
+  }
+  .logo-shine.play{opacity:1;}
+  .logo-shine.play::before{animation:logoShine 1.9s cubic-bezier(.35,.6,.4,1) both;} /* kissé lassabb, gráciásabb – jobban látszik */
+  @keyframes logoShine{
+    from{transform:translateX(-140%) skewX(-18deg);}
+    to{transform:translateX(330%) skewX(-18deg);}
+  }
+  .logo-aura{
+    position:absolute;inset:-14%;pointer-events:none;opacity:0;z-index:-1;
+    background:radial-gradient(circle, rgba(244,206,120,.38), rgba(244,206,120,.12) 55%, transparent 72%);
+  }
+  .logo-aura.play{animation:logoAura 2.1s ease-in-out both;}
+  @keyframes logoAura{0%{opacity:0;transform:scale(.9);}35%{opacity:1;transform:scale(1.05);}100%{opacity:0;transform:scale(1.12);}}
+  .hero-wordmark{
+    position:relative;
+    font-family:'Cormorant Garamond',serif;font-weight:600;
+    font-size:clamp(46px,10vw,96px);
+    font-size:min(clamp(46px,10vw,96px),10svh); /* alacsony ablakban kisebb */
+    line-height:1;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--cream);margin:0 auto 4px;
+    padding-left:.14em; /* optikai kiegyenlítés a ritkításhoz */
+  }
+  /* arany fény-csillanás a feliraton – betöltéskor + tetőre visszatéréskor */
+  .hero-wordmark::after{
+    content:"SILCRIS";content:"SILCRIS" / ""; /* üres alt-szöveg: a felolvasó nem mondja duplán */
+    position:absolute;inset:0;padding-left:.14em;pointer-events:none;
+    background:linear-gradient(105deg,transparent 42%,rgba(230,196,126,.95) 50%,transparent 58%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+    background-size:250% 100%;background-position:180% 0;
+  }
+  .hero-wordmark.shine::after{animation:goldShine 2.2s cubic-bezier(.32,.62,.4,1) both;}
+  @keyframes goldShine{from{background-position:180% 0;}to{background-position:-80% 0;}}
+  /* a rózsás tapéta-háttér lágyan felfénylik ugyanekkor */
+  .hero-bg.flash{animation:bgFlash 2.6s ease-in-out;}
+  @keyframes bgFlash{0%{opacity:var(--herobg-op,.42);}26%{opacity:calc(var(--herobg-op,.42) + .05);}100%{opacity:var(--herobg-op,.42);}} /* a nyugalmi opacityből indul/oda tér vissza (mobilon .55) → sima lélegzet, nincs lépcső */
+  /* ✦ Csillámló pontfények a bazsarózsa szirmain – folyamatos csillogás-pezsgés.
+     A .spark elemeket JS szórja szét a hero fölé. */
+  .sparkles{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+  .spark{position:absolute;opacity:0;transform:scale(.2);
+    animation:twinkle var(--dur,2.6s) ease-in-out var(--del,0s) infinite;}
+  .sparkles.paused .spark{animation-play-state:paused;}
+  /* ARANY izzó mag fehér-forró közepével – a világos bazsarózsán arany glint, mint a fóliacsillám */
+  .spark::after{content:"";position:absolute;inset:0;border-radius:50%;
+    background:radial-gradient(circle at 50% 50%,
+      rgba(255,250,236,.98) 0%, rgba(201,155,74,.85) 28%, rgba(201,155,74,.32) 56%, transparent 74%);}
+  /* négyágú arany csillag-fény (két keresztezett sugár) */
+  .spark::before{content:"";position:absolute;left:50%;top:50%;width:250%;height:250%;
+    transform:translate(-50%,-50%);
+    background:
+      linear-gradient(0deg,transparent 46%, rgba(201,155,74,.85) 50%, transparent 54%),
+      linear-gradient(90deg,transparent 46%, rgba(201,155,74,.85) 50%, transparent 54%);
+    -webkit-mask:radial-gradient(circle at 50% 50%, #000 0%, transparent 62%);
+            mask:radial-gradient(circle at 50% 50%, #000 0%, transparent 62%);}
+  /* a „gold" variáns egy árnyalattal melegebb/mélyebb – változatosságért */
+  .spark.gold::after{background:radial-gradient(circle at 50% 50%,
+      rgba(255,247,226,.98) 0%, rgba(179,130,54,.82) 30%, rgba(179,130,54,.3) 58%, transparent 74%);}
+  .spark.gold::before{background:
+      linear-gradient(0deg,transparent 46%, rgba(179,130,54,.82) 50%, transparent 54%),
+      linear-gradient(90deg,transparent 46%, rgba(179,130,54,.82) 50%, transparent 54%);}
+  @keyframes twinkle{
+    0%,100%{opacity:0;transform:scale(.2) rotate(0deg);}
+    50%{opacity:1;transform:scale(1) rotate(45deg);}
+  }
+  /* Az intró lezárulta után a szikrák elcsendesednek: csak APRÓ, halvány
+     csillámpor-ragyogás marad. A váltás SZIKRÁNKÉNT történik, mindig az adott
+     szikra sötét pillanatában (opacity 0) → az átalakulás folytonos, láthatatlan. */
+  .spark.dusted{animation-name:twinkleDust;}
+  .spark.dusted::before{display:none;} /* nincs fénykereszt, csak pici izzó mag */
+  .spark.morphing::before{opacity:0;transition:opacity .5s ease;} /* átalakulás közben a sugarak kihalványulnak */
+  /* Tetőre-visszatéréskor (burst): a sugárkereszt POP nélkül úszik be a felduzzadás alatt.
+     FONTOS: e két szabály a .spark.dusted::before{display:none} UTÁN áll, hogy a display:block győzzön. */
+  .spark.rayhide::before{display:block;opacity:0;}                             /* kiszabva, de láthatatlan → nincs display:none→1 pattanás */
+  .spark.rayshow::before{display:block;opacity:1;transition:opacity .5s ease;} /* a sugarak lágyan felúsznak */
+  @keyframes twinkleDust{
+    0%,100%{opacity:0;transform:scale(.18);}
+    50%{opacity:.82;transform:scale(.62);}   /* láthatóbb por-ragyogás (volt .6/.46) */
+  }
+  .hero-tag{
+    font-family:'Jost',sans-serif;font-weight:400;font-size:13px;
+    letter-spacing:.26em;text-transform:uppercase;color:var(--cream);margin:8px 0 4px;
+    padding-left:.26em;white-space:nowrap;
+  }
+  .hero-script{
+    font-family:'Parisienne',cursive;
+    font-size:clamp(26px,4.5vw,38px);
+    font-size:min(clamp(26px,4.5vw,38px),5svh);
+    color:var(--rose);margin-bottom:6px;
+  }
+  h1{
+    font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:clamp(34px,7.5vw,84px);
+    font-size:min(clamp(34px,7.5vw,84px),7.2svh); /* a hajtás fölé férjen */
+    line-height:1.06;letter-spacing:.01em;
+    max-width:13ch;margin:0 auto 20px;margin-bottom:clamp(10px,2svh,20px);
+  }
+  h1 em{font-style:italic;color:var(--gold);}
+  .hero-sub{
+    max-width:46ch;margin:0 auto 38px;margin-bottom:clamp(14px,3.5svh,38px);
+    color:var(--cream-dim);
+    font-size:clamp(15px,2vw,17px);
+  }
+  .btn{
+    display:inline-block;text-decoration:none;font-family:'Jost',sans-serif;
+    font-size:13.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;
+    padding:16px 34px;transition:all .25s;
+  }
+  .btn-gold{background:var(--gold);color:var(--on-gold);}
+  .btn-gold:hover{background:#D6B372;}
+  .btn-line{border:1px solid var(--gold-soft);color:var(--cream);}
+  .btn-line:hover{border-color:var(--gold);color:var(--gold);}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+
+  /* ---------- Szekció alapok ---------- */
+  section{padding:88px 0;}
+
+  /* ---------- VILÁGOS SZEKCIÓK (frissítés: váltakozó világos↔sötét, hogy a lap lélegezzen) ---------- */
+  .light{background:var(--cream-bg);color:var(--ink);position:relative;}
+  .light .eyebrow{color:var(--gold-deep);}
+  .light h2{color:#1E2A24;}
+  .light p{color:var(--ink-dim);}
+  .light .hero-script{color:var(--rose);}             /* mélyebb púder-rózsa, világoson is AA-olvasható */
+  .light .flourish,.light .divider{color:var(--gold-deep);}
+  .light .divider::before,.light .divider::after{background:rgba(169,132,63,.35);}
+  /* (a régi sötét→krém átmenet-sávok törölve – világos témában nincs rájuk szükség) */
+  .light .wrap{position:relative;z-index:1;}
+  .light .rolam-text p{color:var(--ink-dim);}
+  .light .rolam-text p strong{color:var(--ink);}
+  .light .g-hint{color:var(--ink-dim);}
+  .light .portre{background:var(--cream-card);border-color:rgba(156,121,56,.4);}
+  .light .portre::before{border-color:rgba(156,121,56,.4);}
+  .light .slot{background:var(--cream-card);border-color:rgba(156,121,56,.28);}
+  /* ---------- Eszközök szekció (világos) ---------- */
+  .eszkoz-head{text-align:center;max-width:60ch;margin:0 auto 50px;}
+  .eszkoz-grid{display:grid;gap:22px;grid-template-columns:1fr;}
+  @media(min-width:760px){.eszkoz-grid{grid-template-columns:repeat(3,1fr);}}
+  .eszkoz-card{position:relative;overflow:hidden;background:var(--cream-card);
+    border:1px solid rgba(156,121,56,.26);box-shadow:0 14px 34px rgba(30,42,36,.10);}
+  .eszkoz-card img{width:100%;height:clamp(300px,42vw,360px);object-fit:cover;object-position:center 30%;
+    display:block;transition:transform .5s ease;}
+  .eszkoz-card:hover img{transform:scale(1.045);}
+  .eszkoz-cap{padding:20px 22px 24px;}
+  .eszkoz-cap h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:22px;
+    color:#1E2A24;margin-bottom:6px;}
+  .eszkoz-cap p{font-size:14.5px;color:var(--ink-dim);}
+  .eyebrow{
+    font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--gold-deep);margin-bottom:14px;font-weight:400;
+  }
+  h2{
+    font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:clamp(30px,4.6vw,46px);line-height:1.12;margin-bottom:18px;
+  }
+  .divider{
+    display:flex;align-items:center;justify-content:center;gap:16px;
+    color:var(--gold);opacity:.7;padding:0 0 0;
+  }
+  .divider::before,.divider::after{
+    content:"";height:1px;width:min(120px,24vw);background:var(--gold-soft);
+  }
+  .divider svg{width:20px;height:20px;}
+
+  /* ---------- Arany dísz-motívum (az ajándékutalvány stílusában) ---------- */
+  .flourish{display:block;margin:0 auto;width:min(280px,62vw);height:auto;color:var(--gold);}
+  .flourish-divider{padding:6px 22px 0;}
+  .hero .flourish{margin:16px auto 22px;margin:clamp(6px,1.5svh,16px) auto clamp(8px,2.2svh,22px);width:min(230px,52vw);opacity:.95;}
+  .szolg-head .flourish,.munkak-head .flourish{margin:14px auto 0;width:min(210px,48vw);}
+  /* Arany dupla keret – az utalvány jellegzetes kerete */
+  /* Arany lap-keret: a TELJES oldalt (dokumentumot) öleli, együtt gördül a tartalommal –
+     így sosem vág bele gombba/szövegbe, ahogy a rögzített változat tette */
+  .page-frame{position:absolute;inset:14px;border:1px solid var(--gold-soft);pointer-events:none;z-index:50;}
+  .page-frame::before{content:"";position:absolute;inset:5px;border:1px solid rgba(198,161,91,.16);}
+  @media(max-width:600px){
+    .page-frame{inset:8px;}
+    .hero{
+      padding-top:96px;
+      padding-left:20px;
+      padding-right:20px;
+      padding-bottom:calc(var(--cta-h) + env(safe-area-inset-bottom) + 20px);
+    }
+    .hero-wordmark{display:none;}
+    .hero-logo{width:220px;width:min(56vw,26svh);} /* mobilon marad a bevált méret */
+    /* MOBIL: több virág látszódjon, mint asztali nézetben (János kérése, 2026-07-19):
+       (1) a hero-bg erősebb (.42→.55; a bgFlash a --herobg-op-ból indul, nincs ugrás),
+       (2) a krém-fátyol könnyebb – a közép (szöveg mögött) marad védett, a szélek/alja
+       felé több virág üt át. A kép mobilon a tapeta-mobil.jpg (csak-virág kivágás). */
+    .hero-bg{--herobg-op:.55;}
+    .hero::before{
+      background:
+        radial-gradient(95% 70% at 50% 40%, rgba(244,237,223,.28) 0%, rgba(244,237,223,.58) 62%, var(--moss) 100%),
+        linear-gradient(180deg, rgba(244,237,223,.24), rgba(244,237,223,.14) 45%, var(--moss) 100%);
+    }
+  }
+  @media(max-height:900px) and (min-width:600.02px){ /* alacsony/közepes ablak (820→900-ra emelve):
+     a főcím EGY sorba, mert 821–~905px magasságban a KÉT soros h1 (~126px) túllógott és a gombokat
+     a foldhoz nyomta – így a teljes nyitóképernyő (gombokkal együtt) elvágás nélkül, levegővel kifér.
+     A NAGY logó (27svh) érintetlen. Mérve 825px-en: 1px → 65px levegő a gombok alatt. */
+    h1{max-width:none;font-size:min(5vw,44px);}
+    .hero-sub{margin-bottom:14px;}
+  }
+
+  /* ---------- Rólam ---------- */
+  #rolam{position:relative;}
+  .rolam-grid{display:grid;gap:44px;align-items:center;}
+  @media(min-width:820px){.rolam-grid{grid-template-columns:5fr 6fr;gap:64px;}}
+  .portre{
+    position:relative;aspect-ratio:4/5;max-width:380px;
+    background:linear-gradient(160deg,var(--moss-3),var(--moss-2));
+    border:1px solid var(--gold-soft);
+  }
+  .portre::before{
+    content:"";position:absolute;inset:0;transform:translate(14px,14px);
+    border:1px solid var(--gold-soft);pointer-events:none;
+  }
+  .portre img{width:100%;height:100%;object-fit:cover;}
+  @media(max-width:600px){.portre::before{transform:translate(8px,8px);}}
+  .rolam-text p{color:var(--cream-dim);margin-bottom:16px;max-width:52ch;}
+  .rolam-text p strong{color:var(--cream);font-weight:400;}
+  /* kézírásos kiemelt idézet a Rólam szövegben */
+  .pull-quote{
+    font-family:'Parisienne',cursive;font-size:clamp(23px,3.4vw,31px);line-height:1.3;
+    color:var(--gold);margin-top:26px;max-width:26ch;position:relative;padding-left:18px;
+  }
+  .pull-quote::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(180deg,var(--gold-deep),transparent);border-radius:2px;}
+  .light .pull-quote{color:var(--gold-deep);}
+
+  /* ---------- Szolgáltatások ---------- */
+  /* a sötét (nem-világos) szekciók lágyabb erdőzöldet kapnak, hogy az összkép ne legyen olyan sötét */
+  .szolg,#arlista,#gyik,#foglalas{background:var(--forest);}
+  .szolg-head{text-align:center;max-width:56ch;margin:0 auto 54px;}
+  .szolg-list{max-width:760px;margin:0 auto;}
+  .szolg-item{
+    display:grid;grid-template-columns:1fr auto;gap:4px 24px;
+    padding:26px 4px;border-bottom:1px solid rgba(198,161,91,.18);
+  }
+  .szolg-item:first-child{border-top:1px solid rgba(198,161,91,.18);}
+  .szolg-nev{
+    font-family:'Cormorant Garamond',serif;font-size:clamp(20px,4.5vw,24px);font-weight:500;
+  }
+  .szolg-ar{
+    font-family:'Cormorant Garamond',serif;font-size:clamp(18px,4vw,22px);color:var(--gold-deep);
+    white-space:nowrap;align-self:start;
+  }
+  .szolg-desc{grid-column:1;color:var(--cream-dim);font-size:14.5px;max-width:52ch;}
+  .szolg-note{
+    text-align:center;margin-top:26px;font-size:13px;color:var(--cream-dim);
+    font-style:italic;
+  }
+  @media(max-width:560px){
+    .szolg-item{grid-template-columns:1fr;}
+    .szolg-ar{white-space:normal;}
+  }
+
+  /* ---------- Tudnivalók ---------- */
+  .tudni-grid{display:grid;gap:18px;margin-top:44px;}
+  @media(min-width:760px){.tudni-grid{grid-template-columns:repeat(3,1fr);}}
+  .tudni{
+    border:1px solid rgba(198,161,91,.2);padding:28px 24px;
+    background:var(--moss-3);
+  }
+  .tudni h3{
+    font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;
+    margin-bottom:10px;color:var(--rose);
+  }
+  .tudni p{font-size:14.5px;color:var(--cream-dim);}
+
+  /* ---------- Galéria ---------- */
+  .munkak-head{text-align:center;max-width:56ch;margin:0 auto 50px;}
+  .galeria{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media(min-width:760px){.galeria{grid-template-columns:repeat(3,1fr);gap:18px;}}
+  .slot{
+    position:relative;aspect-ratio:4/5;overflow:hidden;
+    background:linear-gradient(160deg,var(--moss-3),var(--moss-2));
+    border:1px solid rgba(198,161,91,.22);
+  }
+  .slot img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .slot:hover img{transform:scale(1.04);}
+  .slot.empty img{display:none;}
+  .slot.empty::before{
+    content:"❀";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:58px;color:var(--gold);opacity:.16;
+  }
+  .slot.empty::after{
+    content:attr(data-label);position:absolute;left:0;right:0;bottom:16px;
+    text-align:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--cream-dim);
+  }
+  /* galéria csempék kattinthatóvá (gomb) + nagyító-jel */
+  .galeria .slot{padding:0;margin:0;font:inherit;color:inherit;display:block;width:100%;cursor:pointer;}
+  .galeria .slot:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+  .galeria .slot.empty{cursor:default;}
+  .galeria .slot .zoom-cue{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;pointer-events:none;
+    background:rgba(13,28,23,.62);border:1px solid var(--gold-soft);color:var(--gold);
+    opacity:0;transform:scale(.85);transition:opacity .25s,transform .25s;}
+  .galeria .slot:hover .zoom-cue,.galeria .slot:focus-visible .zoom-cue{opacity:1;transform:none;}
+  .galeria .slot .zoom-cue svg{width:16px;height:16px;}
+  .g-hint{text-align:center;margin-top:26px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);}
+
+  /* ---------- Lightbox (galéria nagyban) – arany keret, mohazöld háttér ---------- */
+  .lightbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
+    padding:clamp(14px,4vw,48px);background:rgba(9,20,16,.94);opacity:0;transition:opacity .28s ease;}
+  .lightbox[hidden]{display:none;}
+  .lightbox.open{opacity:1;}
+  .lb-stage{margin:0;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:100%;max-height:100%;}
+  .lb-img{max-width:min(88vw,720px);max-height:82vh;width:auto;height:auto;object-fit:contain;
+    border:1px solid var(--gold-soft);box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 0 6px rgba(18,38,32,.5);
+    transform:scale(.96);transition:transform .28s ease;}
+  .lightbox.open .lb-img{transform:none;}
+  .lb-counter{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);}
+  .lb-close,.lb-nav{position:absolute;background:rgba(13,28,23,.7);border:1px solid var(--gold-soft);
+    color:var(--cream);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:border-color .2s,color .2s,background .2s,transform .2s;-webkit-tap-highlight-color:transparent;}
+  .lb-close:hover,.lb-nav:hover,.lb-close:focus-visible,.lb-nav:focus-visible{border-color:var(--gold);color:var(--gold);background:rgba(13,28,23,.92);}
+  .lb-close{top:18px;right:18px;width:46px;height:46px;border-radius:50%;font-size:26px;line-height:1;}
+  .lb-nav{top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;font-size:30px;line-height:1;padding-bottom:3px;}
+  .lb-nav:hover,.lb-nav:focus-visible{transform:translateY(-50%) scale(1.06);}
+  .lb-prev{left:16px;} .lb-next{right:16px;}
+  @media(max-width:560px){
+    .lb-close{top:12px;right:12px;width:40px;height:40px;font-size:22px;}
+    .lb-nav{width:42px;height:42px;font-size:24px;}
+    .lb-prev{left:8px;} .lb-next{right:8px;}
+    .lb-img{max-width:94vw;max-height:76vh;}
+  }
+  body.lb-lock{overflow:hidden;}
+
+  /* ---------- Foglalás ---------- */
+  .foglalas-box{
+    max-width:640px;margin:0 auto;text-align:center;overflow:hidden;
+    border:1px solid var(--gold-soft);padding:56px 30px;
+    position:relative;background:var(--moss-3);
+  }
+  .foglalas-box::before{
+    content:"";position:absolute;inset:8px;border:1px solid rgba(198,161,91,.16);
+    pointer-events:none;z-index:1;
+  }
+  /* A sarok-dísz (halvány bazsarózsa-fotó) VÉGLEG TÖRÖLVE (2026-07-19):
+     a Gemini-konzultáció és János ítélete is: a dupla arany keret önmagában
+     elegáns, a fotó-folt csak zaj volt ("kevesebb több"). */
+  .foglalas-box > *{position:relative;z-index:2;}
+  .foglalas-box .hero-script{font-size:30px;}
+  .foglalas-box p{color:var(--cream-dim);max-width:42ch;margin:0 auto 28px;}
+
+  /* ---------- Kapcsolat / lábléc ---------- */
+  footer{
+    background:var(--moss-2);padding:70px 0 40px;margin-top:0;
+    border-top:1px solid var(--gold-soft);
+  }
+  .foot-grid{display:grid;gap:36px;margin-bottom:50px;}
+  @media(min-width:760px){.foot-grid{grid-template-columns:repeat(3,1fr);}}
+  .foot h3{
+    font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:14px;font-weight:500;
+  }
+  .foot p, .foot a{color:var(--cream-dim);font-size:15px;text-decoration:none;}
+  .foot a:hover{color:var(--gold);}
+  .copy{
+    text-align:center;font-size:12px;color:var(--cream-dim);
+    padding-top:26px;border-top:1px solid var(--gold-soft);
+  }
+
+  /* ---------- GYIK ---------- */
+  .faq{max-width:760px;margin:0 auto;}
+  .faq details{border-bottom:1px solid rgba(198,161,91,.18);}
+  .faq details:first-child{border-top:1px solid rgba(198,161,91,.18);}
+  .faq summary{
+    cursor:pointer;list-style:none;padding:22px 44px 22px 4px;position:relative;
+    font-family:'Cormorant Garamond',serif;font-size:clamp(19px,3vw,23px);font-weight:500;
+    color:var(--cream);transition:color .2s;
+  }
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary:hover{color:var(--gold);}
+  .faq summary::after{
+    content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);
+    color:var(--gold);font-size:26px;font-weight:300;line-height:1;
+  }
+  .faq details[open] summary::after{content:"–";}
+  .faq details p{padding:0 4px 24px;color:var(--cream-dim);font-size:14.5px;max-width:66ch;}
+
+  /* ---------- Ragadós mobil CTA ---------- */
+  .mobile-cta{display:none;}
+  @media(max-width:819.98px){
+    .hero{
+      padding-bottom:calc(var(--cta-h) + env(safe-area-inset-bottom) + 30px);
+    }
+    .mobile-cta{
+      display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;
+      background:#35302A;border-top:1px solid var(--gold-soft); /* mély espresszó tálca (iOS-biztos), arany gombbal */
+      box-shadow:0 -6px 20px rgba(53,48,42,.20);
+      min-height:var(--cta-h);
+      padding-bottom:env(safe-area-inset-bottom);
+      padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);
+      visibility:hidden;transform:translateY(100%);
+      transition:transform .32s cubic-bezier(.22,.9,.3,1), visibility 0s linear .32s;
+    }
+    .mobile-cta.show{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.22,.9,.3,1);}
+    .mobile-cta a{
+      flex:1;text-align:center;padding:15px 8px;text-decoration:none;
+      font-family:'Jost',sans-serif;font-weight:500;font-size:13px;
+      letter-spacing:.14em;text-transform:uppercase;
+    }
+    .mobile-cta .m-ghost{background:transparent;color:var(--cream);border-right:1px solid var(--gold-soft);}
+    .mobile-cta .m-primary{background:var(--gold);color:var(--on-gold);}
+    /* a CTA-nak fenntartott hely a LÁBLÉCEN (sötét), ne a body-n (világosabb moss) – így nincs színsáv */
+    footer{padding-bottom:calc(40px + var(--cta-h) + env(safe-area-inset-bottom));}
+  }
+
+  /* ---------- Megjelenési animáció ---------- */
+  .rev{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease;}
+  .rev.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .rev{opacity:1;transform:none;transition:none;}
+    .hero-rose path{animation:none;stroke-dashoffset:0;}
+    .hero-logo{animation:none;opacity:1;transform:none;}
+    .slot img{transition:none;}
+    .slot:hover img{transform:none;}
+    .hero-wordmark.shine::after,.hero-bg.flash{animation:none;}
+    .hero-bg.flash{opacity:var(--herobg-op,.42);}
+    .spark{animation:none;opacity:0;}
+    .mobile-cta{transition:none;}
+  }
+</style>
+<noscript><style>.rev{opacity:1;transform:none;}</style></noscript>
+</head>
+<body>
+
+<script>/* Intró: azonnal elrejtjük a tartalmat, hogy a medál mögül ússzon be.
+   KIHAGYJUK mozgáscsökkentett módban ÉS #szakasz-linkes betöltésnél (ott legörgetett
+   lapon játszana: rossz kinövési origó + képernyőn kívüli dokkolás). */
+(function(){try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash){
+  document.documentElement.classList.add('js-intro','intro-lock','intro-hide-main','intro-hide-header');
+  /* Vészféksor: ha a lap betöltése megszakad és a fő szkript (a body végén) sosem fut le,
+     ne ragadjon örökre a zöld fátyol alatt – 9 mp után feloldunk. */
+  setTimeout(function(){
+    var r=document.documentElement;
+    if(window.__introCtl || !r.classList.contains('intro-lock')) return; // a vezérlő él → övé a dolog
+    r.classList.remove('intro-lock','intro-hide-main','intro-hide-header','js-intro');
+    var i=document.getElementById('intro'); if(i) i.remove();
+  }, 9000);
+}}catch(e){}})();
+</script>
+
+<!-- ================= INTRÓ: medál-logó szétnyílik, kifut a tartalom, majd a hero-logóba simul ================= -->
+<div id="intro" aria-hidden="true">
+  <div class="dock-wrap">
+    <div class="locket">
+      <span class="bloom" aria-hidden="true"></span>
+      <img class="locket-img" src="images/logo.png" width="640" height="640" alt=""
+           onerror="this.style.display='none'">
+    </div>
+  </div>
+</div>
+
+<a class="skip-link" href="#tartalom">Ugrás a tartalomra</a>
+
+<div class="page-frame" aria-hidden="true"></div>
+
+<header class="topbar">
+  <span class="brand-sign" aria-hidden="true">Szántai Szilvia<svg class="sign-star" viewBox="0 0 100 100"><defs><radialGradient id="signStarGlow"><stop offset="0" stop-color="#fff"/><stop offset=".07" stop-color="#fff"/><stop offset=".2" stop-color="#fff" stop-opacity=".45"/><stop offset=".4" stop-color="#c4963f" stop-opacity=".3"/><stop offset=".72" stop-color="#c4963f" stop-opacity="0"/></radialGradient><radialGradient id="signStarRay"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#signStarGlow)"/><g fill="url(#signStarRay)"><path d="M50 1 52.6 47.4 99 50 52.6 52.6 50 99 47.4 52.6 1 50 47.4 47.4Z"/><path d="M50 14 52.2 47.8 86 50 52.2 52.2 50 86 47.8 52.2 14 50 47.8 47.8Z" transform="rotate(45 50 50)"/><path d="M50 28 51.6 48.4 72 50 51.6 51.6 50 72 48.4 51.6 28 50 48.4 48.4Z" transform="rotate(22.5 50 50)" opacity=".55"/></g></svg></span>
+  <nav class="topnav" aria-label="Fő menü">
+    <a href="#rolam">Bemutatkozás</a>
+    <a href="#szolgaltatasok">Szolgáltatások</a>
+    <a href="#arlista">Árlista</a>
+    <a href="#munkaim">Galéria</a>
+    <a href="#gyik">GYIK</a>
+    <a href="#foglalas">Időpontfoglalás</a>
+    <a href="#kapcsolat">Kapcsolat</a>
+  </nav>
+  <button class="nav-toggle" aria-expanded="false" aria-label="Menü" aria-controls="mobil-menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="mobile-nav" id="mobil-menu" aria-label="Mobil menü">
+    <a href="#rolam">Bemutatkozás</a>
+    <a href="#szolgaltatasok">Szolgáltatások</a>
+    <a href="#arlista">Árlista</a>
+    <a href="#munkaim">Galéria</a>
+    <a href="#gyik">GYIK</a>
+    <a href="#foglalas">Időpontfoglalás</a>
+    <a href="#kapcsolat">Kapcsolat</a>
+  </nav>
+</header>
+
+<main id="tartalom" tabindex="-1">
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <picture class="hero-bg-pic">
+    <!-- Mobilon a CSAK-VIRÁG kivágás megy (mennyezet+kanapé nélkül) → több virág látszik -->
+    <source media="(max-width:600px)" srcset="images/tapeta-mobil.jpg">
+    <img class="hero-bg" src="images/tapeta.jpg" alt="" aria-hidden="true" width="900" height="600"
+         onerror="this.style.display='none'">
+  </picture>
+  <div class="sparkles" aria-hidden="true"></div>
+  <span class="logo-wrap">
+    <span class="logo-aura" aria-hidden="true"></span>
+    <img class="hero-logo" src="images/logo.png" width="640" height="640"
+         alt="SILCRIS logó"
+         onerror="this.style.display='none'">
+    <!-- Logó-csillanás: a fénysöprést maga a logó maszkolja → a fény CSAK az arany
+         vonalakon fut végig (mint ékszeren a fény), a medál landolásakor -->
+    <span class="logo-shine" aria-hidden="true"></span>
+  </span>
+  <div class="hero-wordmark">SILCRIS</div>
+  <div class="hero-tag">Sminktetoválás · Szeged</div>
+  <div class="hero-script">Szántai Szilvia</div>
+  <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
+  <h1>Sminkes &amp; <em>Sminktetováló</em></h1>
+  <p class="hero-sub">Sminktetoválás, alkalmi és menyasszonyi smink Szegeden –
+     természetes hatás, ami hetek helyett évekig tart.</p>
+  <div class="hero-ctas">
+    <a class="btn btn-gold" href="#foglalas">Időpontot kérek</a>
+    <a class="btn btn-line" href="#munkaim">Galéria</a>
+  </div>
+</section>
+
+<!-- ================= RÓLAM ================= -->
+<section id="rolam" class="light">
+  <div class="wrap rolam-grid">
+    <div class="portre rev slot" data-label="Portréfotó helye">
+      <img src="images/portre.jpg" width="675" height="900" loading="lazy" alt="Szántai Szilvia – sminkes és sminktetováló">
+    </div>
+    <div class="rolam-text rev">
+      <div class="eyebrow">Bemutatkozás</div>
+      <h2>Szia, Szilvia vagyok</h2>
+      <p><strong>Sminkes és sminktetováló</strong> – a szakmám lényege nem a feltűnés,
+         hanem a mérték. Egy arcnál a legnehezebb tudni, hol kell megállni; hozzám
+         többnyire épp ezért jönnek. Kevés, biztos vonás, jó ízléssel – rendszerint
+         ennyi az egész.</p>
+      <p>Minden arc, bőrtónus és igény más, ezért nálam nincs sablon. A munkát mindig
+         közös tervezéssel kezdem, ahol pontosan kialakítjuk a formát és az árnyalatot,
+         ami igazán a te vonásaidhoz illik.</p>
+      <p>Nyugodt, diszkrét környezetben dolgozom, ahol nyugodtan rám bízhatod magad.
+         Nálam a bizalom és a természetes hatás mindennél fontosabb – hogy elégedetten,
+         magabiztosan lépj ki tőlem.</p>
+      <p class="pull-quote">„A jó sminktetoválást nem veszik észre – csak azt, hogy jól nézel ki.”</p>
+    </div>
+  </div>
+</section>
+
+<div class="flourish-divider" aria-hidden="true">
+  <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
+</div>
+
+<!-- ================= SZOLGÁLTATÁSOK ================= -->
+<section id="szolgaltatasok" class="szolg">
+  <div class="wrap">
+    <div class="szolg-head rev">
+      <div class="eyebrow">Szolgáltatások</div>
+      <h2>Amiben segíthetek</h2>
+      <p class="szolg-desc" style="margin:0 auto;max-width:56ch;">
+         Három terület, egy közös elv: sosem túlzás – mindig te maradsz a főszereplő.</p>
+      <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
+    </div>
+    <div class="szolg-list rev">
+      <div class="szolg-item">
+        <div class="szolg-nev">Sminktetoválás</div>
+        <p class="szolg-desc"><strong style="color:var(--cream);font-weight:400;">Szemöldök:</strong>
+           Soft Powder (lágy satír) és Hard Powder (erős satír).<br>
+           <strong style="color:var(--cream);font-weight:400;">Szemhéj:</strong>
+           szempillatő-sűrítés, tusvonal és ombre tusvonal.<br>
+           <strong style="color:var(--cream);font-weight:400;">Ajak:</strong>
+           teljes satír – dús, egészséges színű ajkak.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Lézeres eltávolítás</div>
+        <p class="szolg-desc">Segítek megszabadulni a megfakult vagy elszíneződött régi
+           tetoválástól – biztonságos lézerrel halványítjuk vagy távolítjuk el, hogy tiszta
+           lappal indulhassunk. Az alkalmak számát és az árat a konzultáción egyeztetjük.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Smink</div>
+        <p class="szolg-desc">Nappali, alkalmi, próba és menyasszonyi smink –
+           a hétköznaptól a legnagyobb napodig, mindig az alkalomra hangolva.</p>
+      </div>
+    </div>
+
+    <div class="tudni-grid">
+      <div class="tudni rev">
+        <h3>Konzultáció</h3>
+        <p>Minden kezelést ingyenes konzultáció előz meg: formatervezés, színválasztás
+           és válasz minden kérdésedre.</p>
+      </div>
+      <div class="tudni rev">
+        <h3>Gyógyulás</h3>
+        <p>A teljes gyógyulás 4–6 hét. A friss tetoválás sötétebb – a végleges,
+           lágy árnyalat ezután alakul ki.</p>
+      </div>
+      <div class="tudni rev">
+        <h3>Kontroll</h3>
+        <p>6–8 hét múlva kontrollalkalom, ahol tökéletesítjük a végeredményt –
+           ez a kezelés része.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ESZKÖZÖK ================= -->
+<section id="eszkozok" class="light">
+  <div class="wrap">
+    <div class="eszkoz-head rev">
+      <div class="eyebrow">Amivel dolgozom</div>
+      <h2>Prémium eszközök, biztonságos kezelés</h2>
+      <p>Minden tűt és fejet bontatlan, egyszer használatos csomagból nyitok ki előtted.
+         Bevizsgált, bőrbarát pigmentekkel dolgozom, amelyek idővel sem szürkülnek vagy
+         színeződnek el – ettől lesz a hatás tartós, és ettől éri meg az ár.</p>
+      <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
+    </div>
+    <div class="eszkoz-grid rev">
+      <figure class="eszkoz-card">
+        <img src="images/eszkoz-ecsetek.jpg" width="880" height="1100" loading="lazy" alt="Professzionális sminkecset-készlet Szántai Szilvia kezében">
+        <figcaption class="eszkoz-cap"><h3>Professzionális ecsetek</h3><p>Teljes, kézzel válogatott ecsetkészlet – a nappalitól a menyasszonyi sminkig.</p></figcaption>
+      </figure>
+      <figure class="eszkoz-card">
+        <img src="images/eszkoz-szerszamok.jpg" width="1200" height="799" loading="lazy" alt="Szemöldökkefék és precíziós ecsetek az előrajzoláshoz">
+        <figcaption class="eszkoz-cap"><h3>Milliméter-pontos tervezés</h3><p>Szemöldökkefék és precíziós ecsetek az előrajzoláshoz – a forma előbb készül el, mint hogy a tű a bőrhöz érne.</p></figcaption>
+      </figure>
+      <figure class="eszkoz-card">
+        <img src="images/eszkoz-pigmentek.jpg" width="732" height="1100" loading="lazy" alt="Prémium, bőrbarát pigmentek">
+        <figcaption class="eszkoz-cap"><h3>Bőrbarát pigmentek</h3><p>Bevizsgált, természetes árnyalatok, amelyek idővel sem szürkülnek vagy színeződnek el.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ÁRLISTA ================= -->
+<section id="arlista">
+  <div class="wrap">
+    <div class="szolg-head rev">
+      <div class="eyebrow">Árlista</div>
+      <h2>Kezelések és áraik</h2>
+    </div>
+
+    <div class="szolg-list rev">
+      <div class="szolg-item">
+        <div class="szolg-nev">Szemöldök – Soft Powder</div>
+        <div class="szolg-ar">60 000 Ft</div>
+        <p class="szolg-desc">Lágy, púderes árnyalás – természetes, finoman formázott szemöldök.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Szemöldök – Hard Powder</div>
+        <div class="szolg-ar">65 000 Ft</div>
+        <p class="szolg-desc">Karakteresebb satír – hangsúlyosabb, tartósan sminkelt hatás.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Szemhéj – Szempillatő-sűrítés</div>
+        <div class="szolg-ar">40 000 Ft</div>
+        <p class="szolg-desc">Finom sűrítősor a pillák tövében – dúsabb tekintet.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Szemhéj – Tusvonal</div>
+        <div class="szolg-ar">50 000 Ft</div>
+        <p class="szolg-desc">Klasszikus tusvonal, ami nem kenődik el.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Szemhéj – Ombre tusvonal</div>
+        <div class="szolg-ar">55 000 Ft</div>
+        <p class="szolg-desc">Lágyan elmosódó, árnyékolt tusvonal.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Ajak – Teljes satír</div>
+        <div class="szolg-ar">65 000 Ft</div>
+        <p class="szolg-desc">Egységes tónus és határozott kontúr.</p>
+      </div>
+    </div>
+
+    <div class="szolg-list rev" style="margin-top:44px;">
+      <div class="szolg-item">
+        <div class="szolg-nev">Korrekció (3 hónapon belül)</div>
+        <div class="szolg-ar">10 000 Ft</div>
+        <p class="szolg-desc">Minden kategóriára érvényes, a kezelést követő 3 hónapon belül.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Frissítés – 1 éven belül</div>
+        <div class="szolg-ar">−30%</div>
+        <p class="szolg-desc">A korábbi tetoválás színének és formájának felújítása kedvezménnyel.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Frissítés – 2 éven belül</div>
+        <div class="szolg-ar">−20%</div>
+        <p class="szolg-desc">Ha valamivel több idő telt el, akkor is kedvezménnyel frissítünk.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Más munkájának javítása</div>
+        <div class="szolg-ar">+10 000 Ft</div>
+        <p class="szolg-desc">Nem általam készített sminktetoválás korrekciója.</p>
+      </div>
+    </div>
+
+    <div class="szolg-list rev" style="margin-top:44px;">
+      <div class="szolg-item">
+        <div class="szolg-nev">Smink – Nappali</div>
+        <div class="szolg-ar">10 000 Ft</div>
+        <p class="szolg-desc">Természetes, hétköznapi smink.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Smink – Alkalmi</div>
+        <div class="szolg-ar">12 000 Ft</div>
+        <p class="szolg-desc">Rendezvényre, ünnepi alkalomra.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Smink – Próba</div>
+        <div class="szolg-ar">14 000 Ft</div>
+        <p class="szolg-desc">Az esküvő vagy nagy alkalom előtti kipróbálás.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Smink – Menyasszonyi</div>
+        <div class="szolg-ar">20 000 Ft</div>
+        <p class="szolg-desc">A legszebb napodra – tartós, fotóálló smink.</p>
+      </div>
+      <div class="szolg-item">
+        <div class="szolg-nev">Lézeres eltávolítás</div>
+        <div class="szolg-ar">Konzultáció alapján</div>
+        <p class="szolg-desc">Az ár az adott munka méretétől és állapotától függ.</p>
+      </div>
+    </div>
+
+    <p class="szolg-note">Az árban benne van az ingyenes konzultáció és a 6–8 hetes kontroll is. A pontos árat mindig a konzultáción egyeztetjük.</p>
+  </div>
+</section>
+
+<!-- ================= GALÉRIA ================= -->
+<section id="munkaim" class="light">
+  <div class="wrap">
+    <div class="munkak-head rev">
+      <div class="eyebrow">Galéria</div>
+      <h2>Ízelítő a munkáimból</h2>
+      <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
+    </div>
+    <div class="galeria rev">
+      <button type="button" class="slot" data-label="Munka · 1" aria-label="1. munka megnyitása nagyban"><img src="images/munka-1.jpg" width="568" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 1"></button>
+      <button type="button" class="slot" data-label="Munka · 2" aria-label="2. munka megnyitása nagyban"><img src="images/munka-2.jpg" width="800" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 2"></button>
+      <button type="button" class="slot" data-label="Munka · 3" aria-label="3. munka megnyitása nagyban"><img src="images/munka-3.jpg" width="750" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 3"></button>
+      <button type="button" class="slot" data-label="Munka · 4" aria-label="4. munka megnyitása nagyban"><img src="images/munka-4.jpg" width="1400" height="751" loading="lazy" alt="Szemöldök sminktetoválás – előtte és utána"></button>
+      <button type="button" class="slot" data-label="Munka · 5" aria-label="5. munka megnyitása nagyban"><img src="images/munka-5.jpg" width="562" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 5"></button>
+      <button type="button" class="slot" data-label="Munka · 6" aria-label="6. munka megnyitása nagyban"><img src="images/munka-6.jpg" width="562" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 6"></button>
+      <button type="button" class="slot" data-label="Munka · 7" aria-label="7. munka megnyitása nagyban"><img src="images/munka-7.jpg" width="562" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 7"></button>
+      <button type="button" class="slot" data-label="Munka · 8" aria-label="8. munka megnyitása nagyban"><img src="images/munka-8.jpg" width="562" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 8"></button>
+      <button type="button" class="slot" data-label="Munka · 9" aria-label="9. munka megnyitása nagyban"><img src="images/munka-9.jpg" width="800" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 9"></button>
+    </div>
+    <p class="g-hint" aria-hidden="true">Kattints a képre a nagyításhoz</p>
+  </div>
+</section>
+
+<!-- ================= GYIK ================= -->
+<section id="gyik">
+  <div class="wrap">
+    <div class="szolg-head rev">
+      <div class="eyebrow">Gyakori kérdések</div>
+      <h2>Amit sokan kérdeznek</h2>
+      <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
+    </div>
+    <div class="faq rev">
+      <details><summary>Fáj a sminktetoválás?</summary><p>Érzéstelenítő krémmel dolgozom, ezért a legtöbben enyhe, jól tolerálható érzésként élik meg. Végig figyelek a kényelmedre, és bármikor tarthatunk szünetet.</p></details>
+      <details><summary>Mennyi ideig tart egy kezelés?</summary><p>Területtől függően általában 1,5–2,5 óra, a konzultációval és a gondos formatervezéssel együtt. Nálam nincs kapkodás – a precíz munka időt igényel.</p></details>
+      <details><summary>Meddig marad meg?</summary><p>Bőrtípustól, életmódtól és napozási szokásoktól függően jellemzően 1–3 évig. A frissítés felújítja a színt és a formát, így tovább szép marad.</p></details>
+      <details><summary>Kinek nem ajánlott?</summary><p>Nem javasolt várandósság vagy szoptatás idején, kezeletlen cukorbetegség, valamint bőrgyógyászati vagy véralvadási probléma esetén. Kétség esetén kérd ki kezelőorvosod véleményét – az első beszélgetésen minden fontos kérdést átbeszélünk.</p></details>
+      <details><summary>Hogyan zajlik a gyógyulás?</summary><p>A friss munka az első napokban sötétebb és intenzívebb, majd kb. 4–6 hét alatt halványul a végleges, lágy árnyalatra. 6–8 hét múlva kontrollra várlak, és részletes utókezelési tájékoztatót is adok.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOGLALÁS ================= -->
+<section id="foglalas">
+  <div class="wrap">
+    <div class="foglalas-box rev">
+      <div class="hero-script">Időpontfoglalás</div>
+      <h2>Kezdjük egy beszélgetéssel</h2>
+      <p>Az első lépés egy <strong style="color:var(--cream);font-weight:400;">ingyenes, kötetlen konzultáció</strong> –
+         együtt megtervezzük a formát és a színt, és átbeszélünk minden kérdést. Semmire nem kötelez.
+         Ha belevágunk, az időpontot <strong style="color:var(--cream);font-weight:400;">20% előleggel</strong> rögzítjük,
+         a pontos időpontról pedig <strong style="color:var(--cream);font-weight:400;">SMS-t</strong> is küldök.
+         Az online naptár hamarosan itt lesz – addig hívj bizalommal.</p>
+      <a class="btn btn-gold" href="tel:+36305415415">06 30 541 5415</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= LÁBLÉC ================= -->
+<footer id="kapcsolat">
+  <div class="wrap">
+    <h2 class="sr-only">Kapcsolat</h2>
+    <div class="foot-grid">
+      <div class="foot">
+        <h3>Cím</h3>
+        <p>6723 Szeged,<br>Római krt. 34.</p>
+      </div>
+      <div class="foot">
+        <h3>Elérhetőség</h3>
+        <p><a href="tel:+36305415415">06 30 541 5415</a><br>
+           E-mail, Instagram és Facebook: hamarosan</p>
+      </div>
+      <div class="foot">
+        <h3>Nyitvatartás</h3>
+        <p>Időpontfoglalás alapján</p>
+      </div>
+    </div>
+    <p class="copy">© 2026 SILCRIS · Szántai Szilvia – Sminkes &amp; Sminktetováló · Szeged</p>
+  </div>
+</footer>
+
+<nav class="mobile-cta" aria-label="Időpontfoglalás">
+  <a class="m-primary" href="#foglalas">Időpontot kérek</a>
+</nav>
+
+<!-- ================= LIGHTBOX (galéria nagyban) ================= -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galéria – nagy nézet" hidden>
+  <button type="button" class="lb-close" aria-label="Bezárás">&times;</button>
+  <button type="button" class="lb-nav lb-prev" aria-label="Előző kép">&#8249;</button>
+  <figure class="lb-stage">
+    <img class="lb-img" src="" alt="">
+    <figcaption class="lb-counter" aria-live="polite" aria-atomic="true"></figcaption>
+  </figure>
+  <button type="button" class="lb-nav lb-next" aria-label="Következő kép">&#8250;</button>
+</div>
+
+<script>
+  // Frissítéskor mindig a lap tetejére (böngésző ne állítsa vissza a görgetést).
+  // Kivéve, ha a linkben van #szakasz – akkor odagördül, mint eddig.
+  if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
+  // Csak akkor ugrunk a tetejére, ha a felhasználó még nem görgetett el (kései load ne rántsa vissza)
+  window.addEventListener('load',()=>{ if(!location.hash && (window.scrollY||document.documentElement.scrollTop||0)<4){ window.scrollTo(0,0); } });
+
+  // Hash-tisztítás: szakasz-ugrás UTÁN a #szekció eltűnik a címsorból, így a cím tiszta
+  // marad → F5-re mindig lejátszik az intró. A gördülést nem zavarja (a replaceState
+  // csak a címsort írja át), és ugyanarra a menüpontra újra kattintva is odagördül.
+  (function(){
+    if(!('replaceState' in history)) return;
+    const clean=()=>{ if(location.hash){ history.replaceState(null,'',location.pathname+location.search); } };
+    window.addEventListener('hashchange',()=>{                      // menü/gomb-kattintás után
+      const t=setTimeout(clean,900);                                // tartalék, ha nem történik gördülés
+      window.addEventListener('scrollend',()=>{ clearTimeout(t); clean(); },{once:true});
+    });
+    window.addEventListener('load',()=>setTimeout(clean,350));      // hash-es link megnyitásakor
+  })();
+
+  /* ===== INTRÓ vezérlés (FÉNY-LÉLEGZÉS): az ép medál megjelenik → a monogram közepéből
+     arany fény dagad ki (közben feltárul a tartalom) → az ép medál ívelt pályán a hero-logó
+     helyére repül → keresztfade + landolás-súly → egy pillanat csend → záró csillanás ===== */
+  (function(){
+    const root=document.documentElement;
+    const intro=document.getElementById('intro');
+    const fin=()=>window.dispatchEvent(new Event('intro:done')); // erre indul a hero-csillanás
+    window.__introCtl=true; // jelezzük a vészféknek: a vezérlő él, övé az életciklus
+    if(!intro || !root.classList.contains('js-intro')){
+      if(intro) intro.remove();
+      root.classList.remove('js-intro','intro-lock','intro-hide-main','intro-hide-header');
+      return; // js-intro nélkül a hero-effekt magától, azonnal játszik
+    }
+    const locket=intro.querySelector('.locket');
+    const T=(fn,ms)=>setTimeout(fn,ms);
+    // Az intró alatt a rejtett tartalom ne kapjon fókuszt/kattintást (Tab se érje el)
+    const inertEls=[].slice.call(document.querySelectorAll('.skip-link,.topbar,main,footer,.mobile-cta'));
+    const setInert=v=>inertEls.forEach(el=>{ try{el.inert=v;}catch(e){} });
+    setInert(true);
+    let landed=false;
+    const land=()=>{                                               // MEGÉRKEZETT: keresztfade + landolás-súly
+      if(landed) return; landed=true;
+      intro.classList.add('land');                                 // a medál kifadel, a valódi logó „beül"
+      root.classList.add('intro-done');
+      root.classList.remove('intro-hide-header','intro-lock','intro-hide-main'); // MOST tárul fel a tartalom
+      setInert(false);
+      T(fin, 320);                                                 // egy pillanat CSEND, majd a záró csillanás
+      T(()=>intro.classList.add('done'), 620);
+      T(()=>intro.remove(), 1150);
+    };
+    const start=()=>{
+      T(()=>intro.classList.add('enter'), 80);                     // 1) az ép medál megjelenik (túllövéssel)
+      T(()=>intro.classList.add('bloom-go','reveal'), 700);        // 2) fény-lélegzés (a tartalom MÉG rejtve)
+      T(()=>{                                                      // 3) az ép medál ívelt pályán a helyére repül
+        const target=document.querySelector('.hero-logo');
+        if(target && locket){
+          const lr=locket.getBoundingClientRect(), er=target.getBoundingClientRect();
+          if(lr.width && er.width){
+            intro.style.setProperty('--dockX', Math.round((er.left+er.width/2)-(lr.left+lr.width/2))+'px');
+            intro.style.setProperty('--dockY', Math.round((er.top+er.height/2)-(lr.top+lr.height/2))+'px');
+            intro.style.setProperty('--dockS', (er.width/lr.width).toFixed(3));
+          }
+        }
+        intro.classList.add('dock');
+        // A landolást a repülés TÉNYLEGES vége indítja (nem fix óra!) – akadozó betöltésnél sem
+        // lesz soha két logó egyszerre. A locket a translateY+scale-t viszi → arra figyelünk.
+        if(locket) locket.addEventListener('transitionend', e=>{ if(e.propertyName==='transform') land(); });
+        T(land, 1300); // tartalék, ha a transitionend elmaradna
+      }, 1450);
+    };
+    // Háttérfülben megnyitva NE fusson vakon (a böngésző lefojtja az időzítőket és
+    // szünetelteti az átmeneteket → szétcsúszna) – várjuk meg, míg a fül látható lesz.
+    if(document.hidden){
+      let handled=false;
+      const h=function(){ if(document.hidden || handled) return; handled=true;
+        document.removeEventListener('visibilitychange', h); clearTimeout(fb); start(); };
+      document.addEventListener('visibilitychange', h);
+      // VÉSZFÉK: ha a fül TARTÓSAN rejtett marad (pl. beépített preview-panel / háttér-webview),
+      // NE ragadjunk örökre az üres fátylon – 1,5s után tárjuk fel a tartalmat intró nélkül
+      // (rejtett fülben az animáció úgysem látszana; ha később előtérbe kerül, a kész oldalt látja).
+      const fb=setTimeout(function(){ if(handled) return; handled=true;
+        document.removeEventListener('visibilitychange', h);
+        land(); // a bevált feltárás (js-intro MARAD, intro-done → a tartalom+logó helyesen láthatóvá válik)
+      }, 1500);
+    } else { start(); }
+  })();
+
+  // Hiányzó képek: elegáns helykitöltő (galéria-gombnál letiltás + nagyító-jel el)
+  document.querySelectorAll('.slot img').forEach(img=>{
+    const box=img.closest('.slot');
+    function kiesett(){
+      box.classList.add('empty');
+      if(box.matches('.galeria .slot')){ box.disabled=true; const c=box.querySelector('.zoom-cue'); if(c) c.remove(); }
+    }
+    img.addEventListener('error',kiesett);
+    if(img.complete && img.naturalWidth===0) kiesett();
+  });
+  // Finom megjelenés görgetésre (ha nincs IntersectionObserver, azonnal megjelenik minden)
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+    }),{threshold:.12});
+    document.querySelectorAll('.rev').forEach(el=>io.observe(el));
+  } else {
+    document.querySelectorAll('.rev').forEach(el=>el.classList.add('in'));
+  }
+  // Mobil hamburger menü: nyitás/zárás, link-kattintásra zárás
+  const toggle=document.querySelector('.nav-toggle');
+  const menu=document.querySelector('.mobile-nav');
+  toggle.addEventListener('click',()=>{
+    const open=menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded',open);
+  });
+  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded','false');
+  }));
+
+  /* Galéria lightbox: nagy nézet, ‹›/nyíl/swipe lapozás, Esc/X/háttér zárás, fókusz-csapda */
+  (function(){
+    const lb=document.getElementById('lightbox');
+    if(!lb) return;
+    const lbImg=lb.querySelector('.lb-img');
+    const lbCounter=lb.querySelector('.lb-counter');
+    const btnClose=lb.querySelector('.lb-close');
+    const btnPrev=lb.querySelector('.lb-prev');
+    const btnNext=lb.querySelector('.lb-next');
+    const slots=Array.from(document.querySelectorAll('.galeria .slot'));
+    if(!slots.length) return;
+    const zoomSVG='<span class="zoom-cue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M21 21l-5-5M10.5 8v5M8 10.5h5"/></svg></span>';
+    slots.forEach(slot=>{
+      const img=slot.querySelector('img');
+      if(slot.classList.contains('empty')||!img){slot.setAttribute('tabindex','-1');return;}
+      slot.insertAdjacentHTML('beforeend', zoomSVG);
+    });
+    const elo=()=>slots.filter(s=>!s.classList.contains('empty')&&s.querySelector('img'));
+    let items=[], cur=0, lastFocus=null, hideT=null;
+    function render(){ const it=items[cur]; lbImg.src=it.src; lbImg.alt=it.alt; lbCounter.textContent=(cur+1)+' / '+items.length; }
+    function open(slot){
+      const jok=elo();
+      items=jok.map(s=>{const i=s.querySelector('img');return {src:i.getAttribute('src'), alt:i.getAttribute('alt')||''};});
+      if(!items.length) return;
+      cur=Math.max(0, jok.indexOf(slot));
+      clearTimeout(hideT); lastFocus=document.activeElement; render();
+      lb.hidden=false; document.body.classList.add('lb-lock');
+      void lb.offsetWidth; lb.classList.add('open'); btnClose.focus();
+    }
+    function close(){
+      lb.classList.remove('open'); document.body.classList.remove('lb-lock');
+      clearTimeout(hideT); hideT=setTimeout(()=>{lb.hidden=true;}, 260);
+      if(lastFocus&&lastFocus.focus) lastFocus.focus();
+    }
+    const go=d=>{cur=(cur+d+items.length)%items.length; render();};
+    slots.forEach(slot=>slot.addEventListener('click',()=>{ if(!slot.classList.contains('empty')) open(slot); }));
+    btnClose.addEventListener('click',close);
+    btnPrev.addEventListener('click',()=>go(-1));
+    btnNext.addEventListener('click',()=>go(1));
+    lb.addEventListener('click',e=>{ if(e.target===lb) close(); });
+    document.addEventListener('keydown',e=>{
+      if(!lb.classList.contains('open')) return; /* zárás-animáció alatt is inaktív */
+      if(e.key==='Escape') close();
+      else if(e.key==='ArrowLeft') go(-1);
+      else if(e.key==='ArrowRight') go(1);
+      else if(e.key==='Tab'){ const kor=[btnClose,btnPrev,btnNext]; const i=kor.indexOf(document.activeElement);
+        e.preventDefault(); kor[e.shiftKey ? (i<=0?kor.length-1:i-1) : (i===-1||i===kor.length-1?0:i+1)].focus(); }
+    });
+    let sx=null;
+    lb.addEventListener('touchstart',e=>{sx=e.changedTouches[0].clientX;},{passive:true});
+    lb.addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>45) go(dx<0?1:-1); sx=null; },{passive:true});
+  })();
+
+
+  /* ♥ EKG-szívverés a logón: a medál landolásakor (intro:done) rajzolódik végig,
+     a szív dobban kettőt, majd az egész elhalványul. */
+  /* ✨ Logó-csillanás: a medál landolásakor a fény végigsöpör a logó arany vonalain,
+     mögötte az aura lüktet egyet – a SILCRIS-felirat csillanásával egy ütemben. */
+  (function(){
+    const shine=document.querySelector('.logo-shine');
+    const aura=document.querySelector('.logo-aura');
+    if(!shine) return;
+    const playShine=()=>{
+      shine.classList.remove('play'); if(aura) aura.classList.remove('play');
+      void shine.offsetWidth;                       // újraindíthatóvá tesz (tetőre visszatéréskor is)
+      shine.classList.add('play'); if(aura) aura.classList.add('play');
+      setTimeout(()=>{ shine.classList.remove('play'); if(aura) aura.classList.remove('play'); }, 2500);
+    };
+    if(document.documentElement.classList.contains('js-intro')){
+      window.addEventListener('intro:done', ()=>setTimeout(playShine,650), {once:true}); // KÜLÖN ütem: a feltárulás/wordmark-glint UTÁN, tiszta színpadon (a szikrák már nem versengenek)
+    }
+    window.addEventListener('hero:celebrate', ()=>setTimeout(playShine,300)); // tetőre visszatéréskor újra megcsillan – a szikrák után 300ms-mal (nem egyszerre)
+  })();
+
+  /* Fejléc: a lap tetején átlátszó (a hero fölött elegáns), görgetéskor TÖMÖR sötét háttér –
+     így a felgörgő tartalom nem üt át az átlátszó menün. */
+  (function(){
+    const topbar=document.querySelector('.topbar');
+    if(!topbar) return;
+    const chk=()=>topbar.classList.toggle('solid', (window.scrollY||document.documentElement.scrollTop||0) > 24);
+    chk(); window.addEventListener('scroll', chk, {passive:true});
+  })();
+
+  /* Hero-effekt: betöltéskor és a tetőre visszatéréskor arany csillanás a feliraton
+     + a rózsás háttér lágyan felfénylik. Scroll-alapú, csak a teljes tetőn indul. */
+  (function(){
+    const bg=document.querySelector('.hero-bg');
+    const wm=document.querySelector('.hero-wordmark');
+    if(!bg&&!wm) return;
+    const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+    function play(){
+      if(reduce.matches) return;
+      if(bg){bg.classList.remove('flash');void bg.offsetWidth;bg.classList.add('flash');}
+      if(wm){wm.classList.remove('shine');void wm.offsetWidth;wm.classList.add('shine');}
+    }
+    // Intróval: a csillanás a medál LANDOLÁSAKOR fusson (a fátyol mögött kárba veszne)
+    if(document.documentElement.classList.contains('js-intro')){
+      window.addEventListener('intro:done', play, {once:true});
+    } else {
+      play();
+    }
+    let wasAway=false;
+    window.addEventListener('scroll',function(){
+      const y=window.scrollY||document.documentElement.scrollTop||0;
+      if(y>100){wasAway=true;}
+      else if(y<=2&&wasAway){ wasAway=false; setTimeout(play,120); // háttér-felfénylés + felirat-csillanás (a szikrák után 120ms-mal)
+        if(!reduce.matches) window.dispatchEvent(new Event('hero:celebrate')); } // t0: szikra-pezsgés; +300ms: logó-csillanás
+    },{passive:true});
+  })();
+
+  /* ✦ Csillámszórás a bazsarózsa szirmaira: sok apró csillag-szikra, szétszórva,
+     eltérő méret/időzítés → folyamatos csillogás-pezsgés. */
+  (function(){
+    const box=document.querySelector('.sparkles');
+    if(!box || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const N = window.matchMedia('(max-width:600px)').matches ? 14 : 26; // kevesebb, mint az eredeti 60, de LÁTHATÓ csillogás
+    // álvéletlen, de determinisztikus szórás (nincs Math.random-függés)
+    let s=1337; const rnd=()=>{ s=(s*1103515245+12345)&0x7fffffff; return s/0x7fffffff; };
+    const frag=document.createDocumentFragment();
+    for(let i=0;i<N;i++){
+      const el=document.createElement('span');
+      el.className='spark dusted'+(rnd()<0.42?' gold':''); // MÁR PORKÉNT indul (halvány pötty, sugár nélkül) → nyitáskor NINCS nagy-csillag felvillanás
+      const size=(5+rnd()*10).toFixed(1);           // 5–15 px
+      el.style.width=el.style.height=size+'px';
+      el.style.left=(2+rnd()*96).toFixed(2)+'%';
+      el.style.top=(3+rnd()*66).toFixed(2)+'%';     // a szirmokra, nem a sötét aljra
+      const dur=(3.4+rnd()*3.2);                     // 3,4–6,6 s (lassabb, nyugodtabb)
+      el.style.setProperty('--dur',dur.toFixed(2)+'s');
+      el.style.setProperty('--del',(-rnd()*dur).toFixed(2)+'s'); // TELJESEN szétszórt fázis a saját ciklusán → SOHA nem villannak együtt
+      frag.appendChild(el);
+    }
+    box.appendChild(frag);
+    let settleTimer=0, gen=0; // gen = re-entrancy token: egy közbejövő burst/settle érvényteleníti a függő időzítőket
+    // A landolás pillanatában a nagy csillagok GYORSAN, de folytonosan halványulnak el
+    // (a pillanatnyi fényerejükről, vágás nélkül), majd apró porszemként élednek újra.
+    const settleToDust=()=>{
+      const myGen=++gen;                                     // token: közbejövő burst érvényteleníti a függő időzítőket
+      // A nagy csillagok SOHA nem tűnnek el: mindegyik a pillanatnyi fényerejéről/méretéről
+      // 0,6s alatt folytonosan a porszem-állapot CSÚCSÁRA (opacity .52, scale .46) morfol
+      // (a fénykereszt közben kihalványul), és a por-animáció PONTOSAN erről a csúcsponti
+      // fázisáról (--del = -dur/2) veszi át – nincs se sötét pillanat, se ugrás.
+      // 4 kötegben (0/180/360/540ms), kötegen belül: előbb MIND olvasás, aztán MIND írás,
+      // EGY reflow-val – a szikránkénti olvasás-írás-reflow hurok (120 reflow) darabosságot okozott
+      const sparks=[].slice.call(box.querySelectorAll('.spark'));
+      const batches=[[],[],[],[]];
+      sparks.forEach(el=>batches[Math.floor(rnd()*4)].push(el));
+      batches.forEach((batch,bi)=>{
+        if(!batch.length) return;
+        setTimeout(()=>{
+          if(myGen!==gen) return;                      // közben burst jött → NE fagyaszd porrá
+          const st=batch.map(el=>{const cs=getComputedStyle(el);return [cs.opacity,cs.transform];});
+          batch.forEach((el,i)=>{                      // pillanatnyi állapot befagyasztva
+            el.style.opacity=st[i][0];
+            el.style.transform=st[i][1];
+            el.style.animation='none';
+            el.classList.remove('rayhide','rayshow');  // burst-ből ragadt sugár-állapot törlése → a morphing kihalványítás működik
+            el.classList.add('morphing');              // sugarak lágy kihalványítása
+          });
+          void box.offsetWidth;                        // egyetlen reflow kötegenként
+          batch.forEach(el=>{
+            el.style.transition='opacity .6s ease, transform .6s ease';
+            el.style.opacity='.82';                      // == twinkleDust 50% csúcs (jump-mentes handoff)
+            el.style.transform='scale(.62)';
+          });
+          batch.forEach(el=>setTimeout(()=>{
+            if(myGen!==gen) return;                     // közben burst jött → NE told porba
+            const dur=parseFloat(el.style.getPropertyValue('--dur'))||2.6;
+            el.style.setProperty('--del',(-dur/2).toFixed(2)+'s'); // a csúcsponttól folytatja
+            el.classList.remove('morphing');
+            el.style.transition=el.style.animation=el.style.opacity=el.style.transform='';
+            el.classList.add('dusted');
+          }, 640));
+        }, bi*180);
+      });
+    };
+    // ✦ Tetőre visszatéréskor: a por LÁGYAN, sugárirányú hullámban duzzad fel nagy csillaggá
+    //    (a settleToDust tükörképe), majd visszaül porrá – nincs pop, nincs ugrás.
+    //    Minden szikra a PILLANATNYI (élő) állapotáról 0,6s alatt felúszik a twinkle 50%-os
+    //    pózára (a fénykereszt POP nélkül halványul BE), majd pontosan arról a csúcsról veszi
+    //    át a folyamatos twinkle (--del=-dur/2) → nulla ugrás. A gyűrűk a SILCRIS-felirattól
+    //    kifelé gyúlnak → „lélegzet", nem villanás.
+    const burst=()=>{
+      clearTimeout(settleTimer);
+      const myGen=++gen;                                     // re-entrancy token
+      const sparks=[].slice.call(box.querySelectorAll('.spark')); // MIND – nem csak .dusted (robusztus + gyógyítja a settle-be fagyottakat)
+      if(!sparks.length){ settleTimer=setTimeout(settleToDust,2100); return; }
+      // gyújtás-origó: a SILCRIS-felirat közepe; ha rejtett (<600px display:none → 0 méret), a doboz közepe
+      const wm=document.querySelector('.hero-wordmark');
+      const orc=wm?wm.getBoundingClientRect():{width:0};
+      const brc=box.getBoundingClientRect();
+      const ox = orc.width ? orc.left+orc.width/2 : brc.left+brc.width/2;
+      const oy = orc.width ? orc.top +orc.height/2 : brc.top +brc.height/2;
+      // pozíciók EGYSZERI kiolvasása (statikus közép), távolság szerint rendezve → egy layout
+      const ranked=sparks.map(el=>{const r=el.getBoundingClientRect();
+          return {el, d:Math.hypot(r.left+r.width/2-ox, r.top+r.height/2-oy)};})
+        .sort((a,b)=>a.d-b.d).map(o=>o.el);
+      const RINGS=5, STAGGER=110, RISE=600, HOLD=RISE+40; // 5 gyűrű 110ms-ként, .6s dagadás, 40ms ráhagyással adjuk vissza
+      const per=Math.ceil(ranked.length/RINGS);
+      for(let ri=0; ri<RINGS; ri++){
+        const ring=ranked.slice(ri*per,(ri+1)*per);
+        if(!ring.length) continue;
+        setTimeout(()=>{
+          if(myGen!==gen) return;                        // közben újabb burst/settle → kilép
+          const st=ring.map(el=>{const cs=getComputedStyle(el);return [cs.opacity,cs.transform];}); // 1) MIND olvasás
+          ring.forEach((el,i)=>{                          // 2) MIND írás: befagyaszt + sugár rejtve (pop nélkül)
+            el.style.opacity=st[i][0];
+            el.style.transform=st[i][1];
+            el.style.animation='none';
+            el.classList.remove('dusted','morphing','rayshow');
+            el.classList.add('rayhide');                  // ::before display:block, de opacity:0 → nincs display:none→1 pattanás
+          });
+          void box.offsetWidth;                           // EGY reflow gyűrűnként
+          ring.forEach(el=>{                              // 3) lágyan felduzzad a twinkle 50%-os pózára
+            el.style.transition='opacity '+RISE+'ms ease-out, transform '+RISE+'ms cubic-bezier(.16,.7,.3,1)';
+            el.style.opacity='1';
+            el.style.transform='scale(1) rotate(45deg)';  // == twinkle 50% keyframe
+            el.classList.remove('rayhide');
+            el.classList.add('rayshow');                  // ::before opacity 0→1, .5s
+          });
+          ring.forEach(el=>setTimeout(()=>{               // 4) átadás a FOLYAMATOS twinkle-nek a csúcsról → nulla ugrás
+            if(myGen!==gen) return;
+            const dur=parseFloat(el.style.getPropertyValue('--dur'))||2.6;
+            el.style.setProperty('--del',(-dur/2).toFixed(2)+'s'); // twinkle az 50%-ról folytatódik
+            el.classList.remove('rayshow');               // innen a base .spark::before (opaque) – nincs delta
+            el.style.transition=el.style.animation=el.style.opacity=el.style.transform='';
+          }, HOLD));
+        }, ri*STAGGER);
+      }
+      settleTimer=setTimeout(settleToDust, 2100);          // a pezsgés után visszaül porrá (a sima úton)
+    };
+    // A szikrák MÁR porként indulnak (fent, 'dusted') → nyitáskor nincs nagy-csillag felvillanás,
+    // nem kell kezdő „lecsendesítés".
+    // FONTOS: a betöltéskori szikra-felragyogás CSAK az intró VÉGÉN induljon (amikor a tartalom
+    // feltárul), különben a fátyol mögött zajlana le és nem látszana. 350ms késés, hogy a feltárulás
+    // után tiszta ütemként lássa. Ugyanaz a burst, mint tetőre-visszatéréskor.
+    if(document.documentElement.classList.contains('js-intro')){
+      window.addEventListener('intro:done', ()=>setTimeout(burst,350), {once:true});
+    } else {
+      setTimeout(burst,350); // intró nélkül (reduced-motion kizárva, mert ott a szikra rejtett) röviddel a betöltés után
+    }
+    window.addEventListener('hero:celebrate', burst); // tetőre visszatéréskor újra pezseg, majd visszaül porrá
+    // teljesítmény: ha a hero kigördül a képből, megállítjuk a szikrákat
+    const hero=document.querySelector('.hero');
+    if(hero && 'IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        box.classList.toggle('paused', !es[0].isIntersecting);
+      }).observe(hero);
+    }
+  })();
+
+  /* Ragadós mobil CTA: csak a hero-gomb és a foglalás-gomb KÖZÖTT látszik;
+     a foglalás UTÁN (lábléc-zóna) már nem. Scroll-alapú, ugrás-biztos. */
+  (function(){
+    const cta=document.querySelector('.mobile-cta');
+    const heroCtas=document.querySelector('.hero-ctas');
+    const bookBtn=document.querySelector('.foglalas-box .btn-gold');
+    if(!cta||!heroCtas||!('IntersectionObserver' in window)) return;
+    let heroVisible=true, bookVisible=false, bookPassed=false;
+    const update=()=>cta.classList.toggle('show', !heroVisible && !bookVisible && !bookPassed);
+    new IntersectionObserver(function(es){ heroVisible=es[es.length-1].isIntersecting; update(); },{rootMargin:'0px 0px -10px 0px'}).observe(heroCtas);
+    if(bookBtn){
+      const chk=function(){
+        const r=bookBtn.getBoundingClientRect();
+        bookVisible = r.top < innerHeight-10 && r.bottom > 0;
+        bookPassed  = r.bottom <= 0;
+        update();
+      };
+      chk();
+      window.addEventListener('scroll', chk, {passive:true});
+      window.addEventListener('resize', chk);
+    }
+  })();
+</script>
+</body>
+</html>
