@@ -655,6 +655,26 @@
   .foglalas-box > *{position:relative;z-index:2;}
   .foglalas-box .hero-script{font-size:30px;}
   .foglalas-box p{color:var(--cream-dim);max-width:42ch;margin:0 auto 28px;}
+  .btn-book{display:inline-flex;align-items:center;gap:9px;}
+  .foglalas-box .book-alt{margin:16px auto 0;font-size:14px;letter-spacing:.02em;}
+  .book-alt a{color:var(--gold-deep);text-decoration:none;border-bottom:1px solid rgba(198,161,91,.45);}
+  .book-alt a:hover{border-bottom-color:var(--gold-deep);}
+
+  /* ---------- Foglaló "hamarosan" ablak (amíg nincs online naptár) ---------- */
+  .book-modal{border:1px solid var(--gold-soft);background:var(--moss-3);color:var(--cream);
+    padding:40px 30px 34px;width:min(92vw,430px);text-align:center;margin:auto;}
+  /* FONTOS: (1) a <dialog> position-jét NEM írjuk felül (a fixed+inset:0 a böngészőé),
+     (2) a margin:auto KELL, mert a globális reset (*{margin:0}) kiüti a beépített
+     központosítást – enélkül az ablak balra-fent jelenik meg. */
+  .book-modal::backdrop{background:rgba(41,53,48,.55);}
+  .book-modal::before{content:"";position:absolute;inset:8px;border:1px solid rgba(198,161,91,.16);pointer-events:none;}
+  .book-modal .hero-script{font-size:26px;}
+  .book-modal h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:25px;margin:2px 0 10px;color:var(--cream);}
+  .book-modal p{color:var(--cream-dim);font-size:15px;line-height:1.65;margin:0 0 22px;}
+  .book-close{position:absolute;top:8px;right:8px;width:36px;height:36px;background:none;border:none;
+    color:var(--cream-dim);font-size:24px;cursor:pointer;line-height:1;}
+  .book-close:hover{color:var(--gold-deep);}
+  .book-close:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
 
   /* ---------- Kapcsolat / lábléc ---------- */
   footer{
@@ -1084,9 +1104,15 @@
       <p>Az első lépés egy <strong style="color:var(--cream);font-weight:400;">ingyenes, kötetlen konzultáció</strong> –
          együtt megtervezzük a formát és a színt, és átbeszélünk minden kérdést. Semmire nem kötelez.
          Ha belevágunk, az időpontot <strong style="color:var(--cream);font-weight:400;">20% előleggel</strong> rögzítjük,
-         a pontos időpontról pedig <strong style="color:var(--cream);font-weight:400;">SMS-t</strong> is küldök.
-         Az online naptár hamarosan itt lesz – addig hívj bizalommal.</p>
-      <a class="btn btn-gold" href="tel:+36305415415">06 30 541 5415</a>
+         a pontos időpontról pedig <strong style="color:var(--cream);font-weight:400;">SMS-t</strong> is küldök.</p>
+      <!-- FŐGOMB – integrációra előkészítve: a JS-ben a BOOKING_URL kitöltésével egyből
+           az online naptárra visz; amíg üres, elegáns "hamarosan" ablakot nyit.
+           JS nélkül a href (telefonhívás) él. -->
+      <a class="btn btn-gold btn-book" id="foglalo-gomb" href="tel:+36305415415">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.2"/><line x1="3.5" y1="10" x2="20.5" y2="10"/><line x1="8" y1="2.8" x2="8" y2="6.4"/><line x1="16" y1="2.8" x2="16" y2="6.4"/></svg>
+        Időpontot foglalok
+      </a>
+      <p class="book-alt">vagy hívj: <a href="tel:+36305415415">06&nbsp;30&nbsp;541&nbsp;5415</a></p>
     </div>
   </div>
 </section>
@@ -1115,6 +1141,16 @@
     <p class="copy">© 2026 SILCRIS · Szántai Szilvia – Sminkes &amp; Sminktetováló · Szeged</p>
   </div>
 </footer>
+
+<!-- ================= FOGLALÓ-ABLAK (amíg nincs online naptár beágyazva) ================= -->
+<dialog class="book-modal" id="book-modal" aria-labelledby="book-modal-cim">
+  <button type="button" class="book-close" id="book-close" aria-label="Bezárás">&#215;</button>
+  <div class="hero-script" aria-hidden="true">Hamarosan</div>
+  <h3 id="book-modal-cim">Az online foglalás úton van</h3>
+  <p>A naptár már készül – addig telefonon egyeztetünk.
+     Hívj bátran, vagy küldj SMS-t, és visszahívlak.</p>
+  <a class="btn btn-gold" href="tel:+36305415415">06 30 541 5415</a>
+</dialog>
 
 <nav class="mobile-cta" aria-label="Időpontfoglalás">
   <a class="m-primary" href="#foglalas">Időpontot kérek</a>
@@ -1496,6 +1532,33 @@
       new IntersectionObserver(function(es){
         box.classList.toggle('paused', !es[0].isIntersecting);
       }).observe(hero);
+    }
+  })();
+
+  /* FOGLALÓ-GOMB – INTEGRÁCIÓRA ELŐKÉSZÍTVE.
+     Ha meglesz a foglalórendszer (Salonic) linkje, CSAK a BOOKING_URL-t kell kitölteni
+     (pl. 'https://silcris.salonic.hu/'), és a gomb új fülön egyből a naptárra visz.
+     Amíg üres: elegáns "hamarosan" ablak nyílik a telefonos alternatívával.
+     JS nélkül a gomb href-je (telefonhívás) él. */
+  (function(){
+    const BOOKING_URL = ''; // <-- IDE a Salonic-link, ha elkészült a fiók
+    const btn=document.getElementById('foglalo-gomb');
+    const dlg=document.getElementById('book-modal');
+    if(!btn) return;
+    if(BOOKING_URL){
+      btn.href=BOOKING_URL; btn.target='_blank'; btn.rel='noopener';
+      return; // integrálva: nincs ablak, egyből a naptár
+    }
+    btn.setAttribute('aria-haspopup','dialog');
+    btn.addEventListener('click',function(e){
+      if(!(dlg && typeof dlg.showModal==='function')) return; // ősi böngésző: marad a tel: hívás
+      e.preventDefault();
+      dlg.showModal();
+    });
+    if(dlg){
+      dlg.addEventListener('click',function(e){ if(e.target===dlg) dlg.close(); }); // háttér-kattintás zár
+      const x=document.getElementById('book-close');
+      if(x) x.addEventListener('click',function(){ dlg.close(); });
     }
   })();
 
