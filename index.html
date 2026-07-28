@@ -126,32 +126,34 @@
      tinta-csillanás fut végig rajta – mintha épp aláírná a munkáját. */
   .brand-sign{
     position:absolute;top:50%;left:max(26px,env(safe-area-inset-left,0px));
-    /* A márkanév a SAJÁT betűjével – ugyanaz, mint a hero „SILCRIS" feliratán
-       (Cormorant verzál, ritkítva). Kézírásos Parisienne-nel a nagybetűk
-       összefolytak, olvashatatlan volt. A söprés+csillag animáció változatlan:
-       az a szöveg szélességétől függetlenül működik. */
-    font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;
-    letter-spacing:.22em;text-transform:uppercase;
-    /* line-height PÁROS px (nem 1 = 19px!): a translateY(-50%) így -10px, egész
-       pixel. 19px magasságnál -9,5px lett volna → a Chrome félpixelre rakja a
-       szöveget és ELMOSSA. (A régi Parisienne 22px volt, azért volt éles.) */
-    line-height:20px;color:var(--gold);
+    font-family:'Cormorant Garamond',serif;font-weight:700;font-size:23px;
+    letter-spacing:.2em;text-transform:uppercase;
+    /* line-height PÁROS px: a translateY(-50%) így -12px, EGÉSZ pixel. Páratlan
+       magasságnál félpixelre kerül a szöveg és a Chrome elmossa. */
+    line-height:24px;
     white-space:nowrap;pointer-events:none;
+    /* A FELIRAT MAGA ARANY FÓLIA: mély arany alap, benne egy világos sáv, ami
+       átfordul rajta. Világos háttéren CSAK így látszik csillanásnak – a régi
+       megoldás világos fényt festett a betűre, ami beleolvadt a krém háttérbe
+       (a betű eltűnt, nem csillant). Egy réteg, nincs ::after-átfedés. */
+    /* A fehér mag SZŰK (49,4–50,6%): egy vékony fényvonal fut át, nem egész
+       betűk fehérednek ki. Széles fehér csúcsnál a betű belevész a krém
+       háttérbe – világos alapon a csillanásnak SZATURÁLT aranynak kell lennie,
+       csak a hajszálvékony mag lehet fehér. */
+    background:linear-gradient(100deg,
+      #6E5020 0%, #7E5D24 30%, #C79A45 42%, #F0D48A 49.4%,
+      #FFF8E8 50%, #F0D48A 50.6%, #C79A45 58%, #7E5D24 70%, #6E5020 100%);
+    background-size:250% 100%;background-position:100% 0;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
     opacity:0;transform:translateY(-50%) translateX(-10px);
     transition:opacity .45s ease, transform .45s ease;
   }
   .topbar.solid .brand-sign{opacity:1;transform:translateY(-50%) translateX(0);
     text-shadow:0 0 9px rgba(169,131,60,.38), 0 0 2px rgba(201,155,74,.45);} /* enyhe arany derengés, míg görgetésnél látszik */
   /* az arany fény, ami finoman, lassan végigsöpör az aláíráson – enyhe, fényes csillogás (nem pulzálás!) */
-  .brand-sign::after{
-    content:"SILCRIS";position:absolute;left:0;top:0;pointer-events:none;
-    background:linear-gradient(100deg,transparent 42%,rgba(255,249,230,.9) 50%,transparent 58%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
-    background-size:250% 100%;background-position:180% 0;
-  }
   /* söpör, majd pihen; a fény a 40%-nál ÉR AZ UTOLSÓ BETŰRE (bg-pos 16,67% = a fény a szöveg jobb szélén, S=2.5-ből) – ez a horgony */
-  .topbar.solid .brand-sign::after{animation:signSheen 3.4s linear .25s infinite;}
+  .topbar.solid .brand-sign{animation:signSheen 3.4s linear .25s infinite;}
   @keyframes signSheen{
     /* SZÉLFUVALLAT-érzet: rövid nyugalom, majd egy gyors, folyékony átsöprés.
        A per-kulcskockás easing adja a lendületet (belendül – átsuhan – kifut). */
@@ -166,7 +168,7 @@
     /* A csillag AZ UTOLSÓ „S" SZÁRÁN üljön, ne mellette a levegőben.
        A 28px-es SVG közepe = right+14px, ezért -7px viszi a betű jobb felső
        ívére (a .22em betűköz ~4px-et ad az elem jobb széléhez). */
-    position:absolute;right:-7px;top:-7px;width:28px;height:28px;
+    position:absolute;right:-7px;top:-6px;width:28px;height:28px;
     opacity:0;transform:scale(.35);transform-origin:50% 50%;
     pointer-events:none;overflow:visible;
     /* arany glória+szegély → a fehér csillag ELÜT a világos krémtől (sötétebb a krémnél) */
