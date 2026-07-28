@@ -128,24 +128,15 @@
     position:absolute;top:50%;left:max(26px,env(safe-area-inset-left,0px));
     font-family:'Cormorant Garamond',serif;font-weight:700;font-size:23px;
     letter-spacing:.2em;text-transform:uppercase;
-    /* line-height PÁROS px: a translateY(-50%) így -12px, EGÉSZ pixel. Páratlan
-       magasságnál félpixelre kerül a szöveg és a Chrome elmossa. */
+    /* line-height PÁROS px: a translateY(-50%) így -12px, EGÉSZ pixel (félpixelen
+       a Chrome elmossa a szöveget). */
     line-height:24px;
+    /* TÖMÖR arany szöveg. NEM background-clip:text + átlátszó kitöltés!
+       Az a technika ott, ahol nem támogatott, LÁTHATATLANNÁ teszi a feliratot
+       (mobilon pontosan ez történt). Itt a betű mindig látszik, a csillanás
+       pedig szín+ragyogás váltással jön (signFlash). */
+    color:var(--gold-deep);
     white-space:nowrap;pointer-events:none;
-    /* A FELIRAT MAGA ARANY FÓLIA: mély arany alap, benne egy világos sáv, ami
-       átfordul rajta. Világos háttéren CSAK így látszik csillanásnak – a régi
-       megoldás világos fényt festett a betűre, ami beleolvadt a krém háttérbe
-       (a betű eltűnt, nem csillant). Egy réteg, nincs ::after-átfedés. */
-    /* A fehér mag SZŰK (49,4–50,6%): egy vékony fényvonal fut át, nem egész
-       betűk fehérednek ki. Széles fehér csúcsnál a betű belevész a krém
-       háttérbe – világos alapon a csillanásnak SZATURÁLT aranynak kell lennie,
-       csak a hajszálvékony mag lehet fehér. */
-    background:linear-gradient(100deg,
-      #6E5020 0%, #7E5D24 30%, #C79A45 42%, #F0D48A 49.4%,
-      #FFF8E8 50%, #F0D48A 50.6%, #C79A45 58%, #7E5D24 70%, #6E5020 100%);
-    background-size:250% 100%;background-position:100% 0;
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
     opacity:0;transform:translateY(-50%) translateX(-10px);
     transition:opacity .45s ease, transform .45s ease;
   }
@@ -157,28 +148,21 @@
      enyhén (1,5px). ⚠️ `transform` NEM használható: a gyerekelem transformja
      SZÉTTÖRI a szülő background-clip:text-jét (a betű egyszerűen eltűnik –
      leteszteltem). `position:relative` + `top` viszont megtartja a fémet. */
-  .brand-sign .l{position:relative;top:0;
-    animation:signRipple 2.5s ease-in-out infinite;
-    /* A lépcső MÉRT értékekből: a fény (gyorsuló easinggel) a 14%-nál éri el az
-       első betűt és a ~38%-nál az utolsót → 0,10s/betű, 0,47s kezdéssel. */
-    animation-delay:calc(.47s + var(--i) * .10s);}
-  @keyframes signRipple{
-    0%  {top:0;}
-    5%  {top:-1.5px;}   /* a betű akkor emelkedik, amikor a fény ÁTFUT rajta */
-    12% {top:0;}
-    100%{top:0;}
+  /* A betűk EGYMÁS UTÁN VILLANNAK FEL – ez maga a fénysöprés. A lépcső
+     (0,10s/betű) viszi végig a hullámot balról jobbra. */
+  .brand-sign .l{
+    animation:signFlash 2.5s ease-in-out infinite;
+    animation-delay:calc(.47s + var(--i) * .10s);
   }
-  .topbar.solid .brand-sign{animation:signSheen 2.5s linear .25s infinite;}
-  @keyframes signSheen{
-    /* SZÉLFUVALLAT-érzet: rövid nyugalom, majd egy gyors, folyékony átsöprés.
-       A per-kulcskockás easing adja a lendületet (belendül – átsuhan – kifut). */
-    0%  {background-position:100% 0;   animation-timing-function:cubic-bezier(.5,0,.55,1);}
-    5%  {background-position:100% 0;   animation-timing-function:cubic-bezier(.35,0,.35,1);}
-    43% {background-position:16.67% 0; animation-timing-function:cubic-bezier(.3,.4,.25,1);} /* a fény AZ UTOLSÓ „S"-en */
-    62% {background-position:-25% 0;}  /* kifutott – láthatatlan */
-    100%{background-position:-25% 0;}  /* pihen (rövidebb szünet: ~1,08s a régi ~1,97s helyett) */
+  @keyframes signFlash{
+    /* NYUGALOM = a kézjegy alap-derengése (ugyanaz, mint a .topbar.solid
+       .brand-sign text-shadow-ja) – különben a betűk „kioltanák" azt. */
+    0%  {color:var(--gold-deep);text-shadow:0 0 9px rgba(169,131,60,.38),0 0 2px rgba(201,155,74,.45);}
+    6%  {color:#EFCC7C;text-shadow:0 0 9px rgba(240,212,138,.9),0 0 3px rgba(255,248,232,.95);}
+    17% {color:var(--gold-deep);text-shadow:0 0 9px rgba(169,131,60,.38),0 0 2px rgba(201,155,74,.45);}
+    100%{color:var(--gold-deep);text-shadow:0 0 9px rgba(169,131,60,.38),0 0 2px rgba(201,155,74,.45);}
   }
-  /* ✦ a söprés VÉGÉN egy fényes CSILLAG-BURST (valódi SVG, sok sugár) villan az utolsó „a" csücskén */
+    /* ✦ a söprés VÉGÉN egy fényes CSILLAG-BURST (valódi SVG, sok sugár) villan az utolsó „a" csücskén */
   .sign-star{
     /* A csillag AZ UTOLSÓ „S" SZÁRÁN üljön, ne mellette a levegőben.
        A 28px-es SVG közepe = right+14px, ezért -7px viszi a betű jobb felső
