@@ -600,21 +600,19 @@
     .szolg-ar{white-space:normal;}
   }
 
-  /* ---------- Fotó-szalag: lélegző elválasztó két szekció közt ----------
-     A szalag MAGA az átmenet a szomszédos szekciók tónusa közt (gradient),
-     a bazsarózsa-fotó pedig fent-lent teljesen elhalványul → nincs éles vágás. */
-  .photo-band{
-    position:relative;height:clamp(150px,20vw,240px);overflow:hidden;
+  /* ---------- Szekció-elválasztó: ARANY PEÓNIA-ORNAMENS ----------
+     VEKTOR, ezért minden képernyőn éles. (Előtte fotó-szalag volt: a tapeta.jpg
+     csak 900×600, abból egy 530×235-ös darab ~3,6×-os nagyítása szemcsésedett
+     széles kijelzőn. Vektorral a felbontás-probléma véglegesen megszűnik, és a
+     halvány szürke fotó-sáv helyett az oldal saját arany vonalrajz-nyelve szól.)
+     A sáv MAGA a tónus-átmenet a két szomszédos szekció színe közt. */
+  .ornament-band{
+    height:clamp(118px,14vw,175px);
+    display:flex;align-items:center;justify-content:center;
     background:linear-gradient(180deg,var(--band-from,var(--moss)) 0%,var(--band-to,var(--forest)) 100%);
   }
-  .photo-band::before{
-    content:"";position:absolute;inset:0;
-    background:url(images/tapeta-szalag.jpg) center 42%/cover;
-    opacity:.62;
-    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#000 62%,transparent 100%);
-    mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#000 62%,transparent 100%);
-  }
-  .photo-band--f2l{--band-from:var(--forest);--band-to:var(--moss);}
+  .ornament-band svg{width:min(74%,520px);color:var(--gold);opacity:.9;}
+  .ornament-band--f2l{--band-from:var(--forest);--band-to:var(--moss);}
 
   /* ---------- Árlista étlap-stílusban ----------
      Pontozott vezetővonal a név és az ár közt; a számok tabuláris számjegyekkel
@@ -960,8 +958,8 @@
   </div>
 </section>
 
-<!-- Fotó-szalag: lélegző elválasztó (világos → mélyebb krém) -->
-<div class="photo-band" aria-hidden="true"></div>
+<!-- Szekció-elválasztó: arany peónia-ornamens (világos → mélyebb krém) -->
+<div class="ornament-band"><svg viewBox="0 0 420 80" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 40h118"/><path d="M296 40h118"/><circle cx="128" cy="40" r="2.2" fill="currentColor" stroke="none"/><circle cx="292" cy="40" r="2.2" fill="currentColor" stroke="none"/><g transform="translate(210,40)"><path d="M0 -19.5 Q12.5 -30.2 13.8 -13.8 Q30.2 -12.5 19.5 0 Q30.2 12.5 13.8 13.8 Q12.5 30.2 0 19.5 Q-12.5 30.2 -13.8 13.8 Q-30.2 12.5 -19.5 0 Q-30.2 -12.5 -13.8 -13.8 Q-12.5 -30.2 0 -19.5Z"/><path d="M6.5 -11.3 Q20.4 -11.8 13 0 Q20.4 11.8 6.5 11.3 Q0 23.6 -6.5 11.3 Q-20.4 11.8 -13 0 Q-20.4 -11.8 -6.5 -11.3 Q0 -23.6 6.5 -11.3Z"/><path d="M0 -7.4 Q8.7 -11.9 7 -2.3 Q14 4.6 4.3 6 Q0 14.7 -4.3 6 Q-14 4.6 -7 -2.3 Q-8.7 -11.9 0 -7.4Z"/><circle cx="0" cy="0" r="2.5"/><path d="M-25 13C-36 17-47 13-54 5C-45-1-32 3-25 13"/><path d="M25 13C36 17 47 13 54 5C45-1 32 3 25 13"/></g></svg></div>
 
 <!-- ================= SZOLGÁLTATÁSOK ================= -->
 <section id="szolgaltatasok" class="szolg">
@@ -1144,8 +1142,8 @@
 </section>
 
 <!-- ================= GALÉRIA ================= -->
-<!-- Fotó-szalag: lélegző elválasztó (mélyebb krém → világos) -->
-<div class="photo-band photo-band--f2l" aria-hidden="true"></div>
+<!-- Szekció-elválasztó: arany peónia-ornamens (mélyebb krém → világos) -->
+<div class="ornament-band ornament-band--f2l"><svg viewBox="0 0 420 80" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 40h118"/><path d="M296 40h118"/><circle cx="128" cy="40" r="2.2" fill="currentColor" stroke="none"/><circle cx="292" cy="40" r="2.2" fill="currentColor" stroke="none"/><g transform="translate(210,40)"><path d="M0 -19.5 Q12.5 -30.2 13.8 -13.8 Q30.2 -12.5 19.5 0 Q30.2 12.5 13.8 13.8 Q12.5 30.2 0 19.5 Q-12.5 30.2 -13.8 13.8 Q-30.2 12.5 -19.5 0 Q-30.2 -12.5 -13.8 -13.8 Q-12.5 -30.2 0 -19.5Z"/><path d="M6.5 -11.3 Q20.4 -11.8 13 0 Q20.4 11.8 6.5 11.3 Q0 23.6 -6.5 11.3 Q-20.4 11.8 -13 0 Q-20.4 -11.8 -6.5 -11.3 Q0 -23.6 6.5 -11.3Z"/><path d="M0 -7.4 Q8.7 -11.9 7 -2.3 Q14 4.6 4.3 6 Q0 14.7 -4.3 6 Q-14 4.6 -7 -2.3 Q-8.7 -11.9 0 -7.4Z"/><circle cx="0" cy="0" r="2.5"/><path d="M-25 13C-36 17-47 13-54 5C-45-1-32 3-25 13"/><path d="M25 13C36 17 47 13 54 5C45-1 32 3 25 13"/></g></svg></div>
 
 <section id="munkaim" class="light">
   <div class="wrap">
