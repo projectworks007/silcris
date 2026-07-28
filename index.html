@@ -552,7 +552,11 @@
   .rolam-grid{display:grid;gap:44px;align-items:center;}
   @media(min-width:820px){.rolam-grid{grid-template-columns:5fr 6fr;gap:64px;}}
   .portre{
-    position:relative;aspect-ratio:4/5;max-width:380px;
+    /* max-width 380 volt: a saját oszlopa 453px, tehát 73px kihasználatlanul
+       maradt mellette – ettől hatott „lebegőnek". Most kitölti az oszlopot,
+       így a portré jelenléte arányos a szövegoszloppal (mérve: 475→566 magas,
+       a szövegtömb 521 – gyakorlatilag egy vonalban zárnak). */
+    position:relative;aspect-ratio:4/5;max-width:100%;
     background:linear-gradient(160deg,var(--moss-3),var(--moss-2));
     border:1px solid var(--gold-soft);
   }
@@ -828,9 +832,20 @@
   /* ---------- Megjelenési animáció ---------- */
   .rev{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease;}
   .rev.in{opacity:1;transform:none;}
+  /* LÉPCSŐZÖTT változat: rácsoknál nem a doboz úszik be egyben, hanem a
+     gyerekei egymás után (a --i sorszámot a JS írja rájuk). A konténer maga
+     passzív, különben duplán animálna. */
+  .rev.stagger{opacity:1;transform:none;transition:none;}
+  .rev.stagger > *{
+    opacity:0;transform:translateY(18px);
+    transition:opacity .55s ease,transform .55s ease;
+    transition-delay:calc(var(--i,0) * 55ms);
+  }
+  .rev.stagger.in > *{opacity:1;transform:none;}
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto;}
     .rev{opacity:1;transform:none;transition:none;}
+    .rev.stagger > *{opacity:1;transform:none;transition:none;}
     .hero-rose path{animation:none;stroke-dashoffset:0;}
     .hero-logo{animation:none;opacity:1;transform:none;}
     .slot img{transition:none;}
@@ -994,18 +1009,18 @@
       </div>
     </div>
 
-    <div class="tudni-grid">
-      <div class="tudni rev">
+    <div class="tudni-grid rev stagger">
+      <div class="tudni">
         <h3>Konzultáció</h3>
         <p>Minden kezelést ingyenes konzultáció előz meg: formatervezés, színválasztás
            és válasz minden kérdésedre.</p>
       </div>
-      <div class="tudni rev">
+      <div class="tudni">
         <h3>Gyógyulás</h3>
         <p>A teljes gyógyulás 4–6 hét. A friss tetoválás sötétebb – a végleges,
            lágy árnyalat ezután alakul ki.</p>
       </div>
-      <div class="tudni rev">
+      <div class="tudni">
         <h3>Kontroll</h3>
         <p>6–8 hét múlva kontrollalkalom, ahol tökéletesítjük a végeredményt –
            ez a kezelés része.</p>
@@ -1025,17 +1040,17 @@
          színeződnek el – ettől lesz a hatás tartós, és ettől éri meg az ár.</p>
       <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
     </div>
-    <div class="eszkoz-grid rev">
+    <div class="eszkoz-grid rev stagger">
       <figure class="eszkoz-card">
-        <img src="images/eszkoz-ecsetek.jpg" width="880" height="1100" loading="lazy" alt="Professzionális sminkecset-készlet Szántai Szilvia kezében">
+        <img src="images/eszkoz-ecsetek.jpg" width="840" height="1050" loading="lazy" alt="Professzionális sminkecset-készlet Szántai Szilvia kezében">
         <figcaption class="eszkoz-cap"><h3>Professzionális ecsetek</h3><p>Teljes, kézzel válogatott ecsetkészlet – a nappalitól a menyasszonyi sminkig.</p></figcaption>
       </figure>
       <figure class="eszkoz-card">
-        <img src="images/eszkoz-szerszamok.jpg" width="1200" height="799" loading="lazy" alt="Szemöldökkefék és precíziós ecsetek az előrajzoláshoz">
+        <img src="images/eszkoz-szerszamok.jpg" width="840" height="559" loading="lazy" alt="Szemöldökkefék és precíziós ecsetek az előrajzoláshoz">
         <figcaption class="eszkoz-cap"><h3>Milliméter-pontos tervezés</h3><p>Szemöldökkefék és precíziós ecsetek az előrajzoláshoz – a forma előbb készül el, mint hogy a tű a bőrhöz érne.</p></figcaption>
       </figure>
       <figure class="eszkoz-card">
-        <img src="images/eszkoz-pigmentek.jpg" width="732" height="1100" loading="lazy" alt="Prémium, bőrbarát pigmentek">
+        <img src="images/eszkoz-pigmentek.jpg" width="840" height="1120" loading="lazy" alt="Prémium, bőrbarát pigmentek">
         <figcaption class="eszkoz-cap"><h3>Bőrbarát pigmentek</h3><p>Bevizsgált, természetes árnyalatok, amelyek idővel sem szürkülnek vagy színeződnek el.</p></figcaption>
       </figure>
     </div>
@@ -1152,7 +1167,7 @@
       <h2>Ízelítő a munkáimból</h2>
       <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
     </div>
-    <div class="galeria rev">
+    <div class="galeria rev stagger">
       <button type="button" class="slot feature" data-label="Munka · 1" aria-label="1. munka megnyitása nagyban"><img src="images/munka-1.jpg" width="568" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 1"></button>
       <button type="button" class="slot" data-label="Munka · 2" aria-label="2. munka megnyitása nagyban"><img src="images/munka-2.jpg" width="800" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 2"></button>
       <button type="button" class="slot" data-label="Munka · 3" aria-label="3. munka megnyitása nagyban"><img src="images/munka-3.jpg" width="750" height="1000" loading="lazy" alt="Sminktetoválás végeredmény 3"></button>
@@ -1359,6 +1374,12 @@
     img.addEventListener('error',kiesett);
     if(img.complete && img.naturalWidth===0) kiesett();
   });
+  // Lépcsőzött beúszás: a stagger-konténerek gyerekei kapnak sorszámot (--i),
+  // amiből a CSS transition-delay-t számol → egymás után úsznak be, nem egyszerre.
+  document.querySelectorAll('.rev.stagger').forEach(box=>{
+    [...box.children].forEach((el,i)=>el.style.setProperty('--i',i));
+  });
+
   // Finom megjelenés görgetésre (ha nincs IntersectionObserver, azonnal megjelenik minden)
   if('IntersectionObserver' in window){
     const io=new IntersectionObserver(es=>es.forEach(e=>{
