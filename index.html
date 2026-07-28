@@ -132,7 +132,10 @@
        az a szöveg szélességétől függetlenül működik. */
     font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;
     letter-spacing:.22em;text-transform:uppercase;
-    line-height:1;color:var(--gold);
+    /* line-height PÁROS px (nem 1 = 19px!): a translateY(-50%) így -10px, egész
+       pixel. 19px magasságnál -9,5px lett volna → a Chrome félpixelre rakja a
+       szöveget és ELMOSSA. (A régi Parisienne 22px volt, azért volt éles.) */
+    line-height:20px;color:var(--gold);
     white-space:nowrap;pointer-events:none;
     opacity:0;transform:translateY(-50%) translateX(-10px);
     transition:opacity .45s ease, transform .45s ease;
@@ -148,30 +151,35 @@
     background-size:250% 100%;background-position:180% 0;
   }
   /* söpör, majd pihen; a fény a 40%-nál ÉR AZ UTOLSÓ BETŰRE (bg-pos 16,67% = a fény a szöveg jobb szélén, S=2.5-ből) – ez a horgony */
-  .topbar.solid .brand-sign::after{animation:signSheen 4.5s ease-in-out .3s infinite;}
+  .topbar.solid .brand-sign::after{animation:signSheen 3.4s linear .25s infinite;}
   @keyframes signSheen{
-    0%  {background-position:100% 0;}    /* a fény még az első betű ELŐTT – láthatatlan */
-    40% {background-position:16.67% 0;}  /* a fény AZ UTOLSÓ betűn („a") – a csillag IS itt villan (40%) */
-    55% {background-position:-25% 0;}    /* továbbsiklott az utolsó betű mögé – láthatatlan */
-    100%{background-position:-25% 0;}    /* pihen a ciklus végéig */
+    /* SZÉLFUVALLAT-érzet: rövid nyugalom, majd egy gyors, folyékony átsöprés.
+       A per-kulcskockás easing adja a lendületet (belendül – átsuhan – kifut). */
+    0%  {background-position:100% 0;   animation-timing-function:cubic-bezier(.5,0,.55,1);}
+    10% {background-position:100% 0;   animation-timing-function:cubic-bezier(.35,0,.35,1);}
+    38% {background-position:16.67% 0; animation-timing-function:cubic-bezier(.3,.4,.25,1);} /* a fény AZ UTOLSÓ „S"-en */
+    52% {background-position:-25% 0;}  /* kifutott – láthatatlan */
+    100%{background-position:-25% 0;}  /* pihen a ciklus végéig */
   }
   /* ✦ a söprés VÉGÉN egy fényes CSILLAG-BURST (valódi SVG, sok sugár) villan az utolsó „a" csücskén */
   .sign-star{
-    /* right: a csillag SZÉLESSÉGÉNÉL nagyobb negatív érték kell, különben
-       ráfekszik az utolsó betűre. A ritkított (letter-spacing:.22em) SILCRIS
-       felirat után -26px adja a szép, éppen csak elváló pozíciót. */
-    position:absolute;right:-26px;top:-5px;width:28px;height:28px;
+    /* A csillag AZ UTOLSÓ „S" SZÁRÁN üljön, ne mellette a levegőben.
+       A 28px-es SVG közepe = right+14px, ezért -7px viszi a betű jobb felső
+       ívére (a .22em betűköz ~4px-et ad az elem jobb széléhez). */
+    position:absolute;right:-7px;top:-7px;width:28px;height:28px;
     opacity:0;transform:scale(.35);transform-origin:50% 50%;
     pointer-events:none;overflow:visible;
     /* arany glória+szegély → a fehér csillag ELÜT a világos krémtől (sötétebb a krémnél) */
     filter:drop-shadow(0 0 1.2px rgba(150,106,42,.9)) drop-shadow(0 0 2.8px rgba(201,155,74,.45));
   }
-  .topbar.solid .sign-star{animation:signStar 4.5s ease-in-out .3s infinite;}
+  .topbar.solid .sign-star{animation:signStar 3.4s ease-in-out .25s infinite;}
   @keyframes signStar{
-    0%,37%{opacity:0;transform:scale(.6) rotate(0deg);}    /* SÖTÉT, míg a fény a betűkön halad → NINCS elő-csillanás */
-    45%{opacity:.8;transform:scale(1) rotate(14deg);}      /* CSÚCS a söprés VÉGÉN – a fény EKKOR hagyja el az utolsó betűt (picit halványabb) */
-    96%{opacity:0;transform:scale(.82) rotate(38deg);}     /* NAGYON lassú, elnyújtott leúszás (~2,3s a 4,5s cikluson) */
-    100%{opacity:0;transform:scale(.6) rotate(0deg);}      /* pihen */
+    /* A csúcs 42%-on: közvetlenül azután, hogy a fény átfut az utolsó „S"-en
+       (sheen 38%). Ha a sheen 38%-át mozgatod, EZT IS mozdítsd vele! */
+    0%,34%{opacity:0;transform:scale(.55) rotate(0deg);}
+    42%{opacity:.9;transform:scale(1) rotate(12deg);}      /* CSÚCS – a szár csillan */
+    88%{opacity:0;transform:scale(.8) rotate(30deg);}      /* lágy leúszás */
+    100%{opacity:0;transform:scale(.55) rotate(0deg);}      /* pihen */
   }
   /* a köztes desktop-sávban (a menü szinte teljes szélességű) elrejtjük, hogy ne ütközzön */
   @media(min-width:820px) and (max-width:1179.98px){.brand-sign{display:none;}}
