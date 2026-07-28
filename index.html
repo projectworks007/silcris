@@ -155,14 +155,20 @@
      a calc()+egyedi CSS-változó az animation-delay-ben mobil böngészőkön
      megbízhatatlan – ha nem oldódik fel, MINDEN betű egyszerre villan, és a
      hullám „össze-vissza" lesz. Fix értékkel ez nem fordulhat elő. */
-  .brand-sign .l{animation:signFlash 2.5s ease-in-out infinite;}
-  .brand-sign .l:nth-child(1){animation-delay:0.47s;}
-  .brand-sign .l:nth-child(2){animation-delay:0.57s;}
-  .brand-sign .l:nth-child(3){animation-delay:0.67s;}
-  .brand-sign .l:nth-child(4){animation-delay:0.77s;}
-  .brand-sign .l:nth-child(5){animation-delay:0.87s;}
-  .brand-sign .l:nth-child(6){animation-delay:0.97s;}
-  .brand-sign .l:nth-child(7){animation-delay:1.07s;}
+  /* ⚠️ A LEGFONTOSABB: az animáció a .topbar.solid ALATT van – UGYANÚGY, mint
+     a csillagé. Korábban a betűké kötetlenül futott (oldalbetöltéstől), a
+     csillagé viszont csak görgetéskor indult → a kettő FÁZISA attól függött,
+     mikor görgetsz = „egyszer így, egyszer úgy" villogás, és véletlenszerű
+     rés a söprés és a csillanás közt. Így most mindig együtt indulnak.
+     A késleltetések is ide kellenek (a rövid `animation:` nullázná őket). */
+  .topbar.solid .brand-sign .l{animation:signFlash 2.5s ease-in-out infinite;}
+  .topbar.solid .brand-sign .l:nth-child(1){animation-delay:0.47s;}
+  .topbar.solid .brand-sign .l:nth-child(2){animation-delay:0.57s;}
+  .topbar.solid .brand-sign .l:nth-child(3){animation-delay:0.67s;}
+  .topbar.solid .brand-sign .l:nth-child(4){animation-delay:0.77s;}
+  .topbar.solid .brand-sign .l:nth-child(5){animation-delay:0.87s;}
+  .topbar.solid .brand-sign .l:nth-child(6){animation-delay:0.97s;}
+  .topbar.solid .brand-sign .l:nth-child(7){animation-delay:1.07s;}
   @keyframes signFlash{
     /* A villanás SZÉLES (0–20%), így a szomszédos betűk fénye ÁTFED →
        folyamatos, végigfutó ragyogás, nem különálló pislogás. */
