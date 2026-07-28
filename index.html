@@ -628,10 +628,14 @@
   }
   #arlista .szolg-ar{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
   .ar-kat{
-    max-width:760px;margin:0 auto;padding:0 4px 12px;
+    /* A térköz a fejléc FÖLÉ kell (korábban a lista kapott margin-top:44px-et,
+       így 44px rés támadt a fejléc és a SAJÁT listája közt → a címke árván
+       lógott a sarokban). Az első fejléc előtt a szekció-fejléc ad levegőt. */
+    max-width:760px;margin:58px auto 0;padding:0 4px 14px;
     font-family:'Jost',sans-serif;font-weight:400;font-size:11.5px;
     letter-spacing:.28em;text-transform:uppercase;color:var(--gold-deep);
   }
+  .ar-kat:first-of-type{margin-top:0;}
   @media(max-width:560px){#arlista .szolg-nev::after{display:none;}}
 
   /* ---------- Szolgáltatás-ikonok (arany vonalrajz) ---------- */
@@ -807,19 +811,27 @@
     .hero{
       padding-bottom:calc(var(--cta-h) + env(safe-area-inset-bottom) + 30px);
     }
+    /* ARANY gomb SÖTÉT tálcában — a VENOM-on bevált recept.
+       Az iOS Safari alsó sávja a képernyő LEGALSÓ pixeleiből veszi a színét,
+       ezért az arany SOSEM érhet az aljáig: körülötte mindig sötét sáv van.
+       KRITIKUS: a 8px FIX padding kell az env() MELLÉ — ezen a készüléken az
+       `env(safe-area-inset-bottom)` = 0 (a Safari-sáv foglalja a helyet), és
+       önmagában hagyva az arany a legalsó pixelig ért → az egész Safari-sáv
+       aranyra váltott („hatalmas alsó káva"). */
     .mobile-cta{
       display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;
-      background:#35302A;border-top:1px solid var(--gold-soft); /* mély espresszó tálca (iOS-biztos), arany gombbal */
+      background:#35302A;border-top:1px solid var(--gold-soft);
       box-shadow:0 -6px 20px rgba(53,48,42,.20);
       min-height:var(--cta-h);
-      padding-bottom:env(safe-area-inset-bottom);
-      padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);
+      padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px)); /* a ráadás csak SÖTÉT lehet */
+      padding-left:max(10px,env(safe-area-inset-left,0px));
+      padding-right:max(10px,env(safe-area-inset-right,0px));
       visibility:hidden;transform:translateY(100%);
       transition:transform .32s cubic-bezier(.22,.9,.3,1), visibility 0s linear .32s;
     }
     .mobile-cta.show{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.22,.9,.3,1);}
     .mobile-cta a{
-      flex:1;text-align:center;padding:15px 8px;text-decoration:none;
+      flex:1;text-align:center;padding:14px 8px;text-decoration:none;
       font-family:'Jost',sans-serif;font-weight:500;font-size:13px;
       letter-spacing:.14em;text-transform:uppercase;
     }
@@ -1100,7 +1112,7 @@
     </div>
 
     <h3 class="ar-kat rev">Korrekció és frissítés</h3>
-    <div class="szolg-list rev" style="margin-top:44px;">
+    <div class="szolg-list rev">
       <div class="szolg-item">
         <div class="szolg-nev">Korrekció (3 hónapon belül)</div>
         <div class="szolg-ar">10 000 Ft</div>
@@ -1124,7 +1136,7 @@
     </div>
 
     <h3 class="ar-kat rev">Smink és lézeres eltávolítás</h3>
-    <div class="szolg-list rev" style="margin-top:44px;">
+    <div class="szolg-list rev">
       <div class="szolg-item">
         <div class="szolg-nev">Smink – Nappali</div>
         <div class="szolg-ar">10 000 Ft</div>
