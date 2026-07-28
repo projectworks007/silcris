@@ -632,15 +632,28 @@
      elrendezése, és nincs elválasztó szerepe a mérete és láthatósága miatt".
      Most ugyanaz a minta, mint a szekció-fejléceknél: szerif cím + arany
      flourish alatta → valódi hierarchia, látható elválasztás.) */
+  /* Árlista kategória-fejléc — „D" VÁLTOZAT: arany sáv-fejléc.
+     (Az „A" – középre zárt szerif + flourish – változat a git-előzményben,
+     egy CSS-blokk cseréjével visszaállítható; a HTML mindkettőhöz azonos.) */
   .ar-kat{
-    max-width:760px;margin:62px auto 26px;text-align:center;
+    max-width:760px;margin:58px auto 0;text-align:center;
+    background:rgba(169,132,63,.13);
+    border-top:1px solid var(--gold-soft);border-bottom:1px solid var(--gold-soft);
+    padding:15px 18px;
   }
   .ar-kat span{
-    display:block;font-family:'Cormorant Garamond',serif;font-weight:500;
-    font-size:clamp(25px,4.6vw,31px);line-height:1.2;color:var(--cream);
+    display:block;font-family:'Jost',sans-serif;font-weight:500;
+    font-size:12.5px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-deep);line-height:1.5;
   }
-  .ar-kat .flourish{width:min(170px,42vw);margin:9px auto 0;}
+  .ar-kat .flourish{display:none;}          /* a sávban a flourish zsúfolna */
   .ar-kat:first-of-type{margin-top:8px;}
+  /* a sáv alsó vonala ÉS a lista első tétel-vonala ne duplázódjon */
+  .ar-kat + .szolg-list .szolg-item:first-child{border-top:none;}
+  @media(max-width:560px){
+    .ar-kat{padding:13px 14px;}
+    .ar-kat span{font-size:11.5px;letter-spacing:.18em;}
+  }
   @media(max-width:560px){#arlista .szolg-nev::after{display:none;}}
 
   /* ---------- Szolgáltatás-ikonok (arany vonalrajz) ---------- */
