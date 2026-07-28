@@ -150,16 +150,25 @@
      leteszteltem). `position:relative` + `top` viszont megtartja a fémet. */
   /* A betűk EGYMÁS UTÁN VILLANNAK FEL – ez maga a fénysöprés. A lépcső
      (0,10s/betű) viszi végig a hullámot balról jobbra. */
-  .brand-sign .l{
-    animation:signFlash 2.5s ease-in-out infinite;
-    animation-delay:calc(.47s + var(--i) * .10s);
-  }
+  /* A betűk EGYMÁS UTÁN VILLANNAK FEL – ez maga a fénysöprés.
+     ⚠️ A késleltetés FIX px-érték nth-child-del, NEM calc(var(--i)*...):
+     a calc()+egyedi CSS-változó az animation-delay-ben mobil böngészőkön
+     megbízhatatlan – ha nem oldódik fel, MINDEN betű egyszerre villan, és a
+     hullám „össze-vissza" lesz. Fix értékkel ez nem fordulhat elő. */
+  .brand-sign .l{animation:signFlash 2.5s ease-in-out infinite;}
+  .brand-sign .l:nth-child(1){animation-delay:0.47s;}
+  .brand-sign .l:nth-child(2){animation-delay:0.57s;}
+  .brand-sign .l:nth-child(3){animation-delay:0.67s;}
+  .brand-sign .l:nth-child(4){animation-delay:0.77s;}
+  .brand-sign .l:nth-child(5){animation-delay:0.87s;}
+  .brand-sign .l:nth-child(6){animation-delay:0.97s;}
+  .brand-sign .l:nth-child(7){animation-delay:1.07s;}
   @keyframes signFlash{
-    /* NYUGALOM = a kézjegy alap-derengése (ugyanaz, mint a .topbar.solid
-       .brand-sign text-shadow-ja) – különben a betűk „kioltanák" azt. */
+    /* A villanás SZÉLES (0–20%), így a szomszédos betűk fénye ÁTFED →
+       folyamatos, végigfutó ragyogás, nem különálló pislogás. */
     0%  {color:var(--gold-deep);text-shadow:0 0 9px rgba(169,131,60,.38),0 0 2px rgba(201,155,74,.45);}
-    6%  {color:#EFCC7C;text-shadow:0 0 9px rgba(240,212,138,.9),0 0 3px rgba(255,248,232,.95);}
-    17% {color:var(--gold-deep);text-shadow:0 0 9px rgba(169,131,60,.38),0 0 2px rgba(201,155,74,.45);}
+    7%  {color:#EFCC7C;text-shadow:0 0 9px rgba(240,212,138,.9),0 0 3px rgba(255,248,232,.95);}
+    20% {color:var(--gold-deep);text-shadow:0 0 9px rgba(169,131,60,.38),0 0 2px rgba(201,155,74,.45);}
     100%{color:var(--gold-deep);text-shadow:0 0 9px rgba(169,131,60,.38),0 0 2px rgba(201,155,74,.45);}
   }
     /* ✦ a söprés VÉGÉN egy fényes CSILLAG-BURST (valódi SVG, sok sugár) villan az utolsó „a" csücskén */
@@ -175,12 +184,13 @@
   }
   .topbar.solid .sign-star{animation:signStar 2.5s ease-in-out .25s infinite;}
   @keyframes signStar{
-    /* A csúcs 42%-on: közvetlenül azután, hogy a fény átfut az utolsó „S"-en
-       (sheen 38%). Ha a sheen 38%-át mozgatod, EZT IS mozdítsd vele! */
-    0%,39%{opacity:0;transform:scale(.55) rotate(0deg);}
-    47%{opacity:.9;transform:scale(1) rotate(12deg);}      /* CSÚCS – a szár csillan (a sheen 43%-a UTÁN) */
-    90%{opacity:0;transform:scale(.8) rotate(30deg);}      /* lágy leúszás */
-    100%{opacity:0;transform:scale(.55) rotate(0deg);}      /* pihen */
+    /* A CSÚCS 50%: az utolsó „S" késleltetése 1,07s + a villanás csúcsa 7%
+       (0,175s) = 1,245s = a 2,5s-os ciklus 49,8%-a. Ez a MOZGÁS VÉGE:
+       utána gyors, tiszta lecsengés (nem hosszú elúszás). */
+    0%,44%{opacity:0;transform:scale(.55) rotate(0deg);}
+    50%{opacity:.95;transform:scale(1) rotate(10deg);}
+    72%{opacity:0;transform:scale(.85) rotate(24deg);}
+    100%{opacity:0;transform:scale(.55) rotate(0deg);}
   }
   /* a köztes desktop-sávban (a menü szinte teljes szélességű) elrejtjük, hogy ne ütközzön */
   @media(min-width:820px) and (max-width:1179.98px){.brand-sign{display:none;}}
@@ -940,7 +950,7 @@
 <div class="page-frame" aria-hidden="true"></div>
 
 <header class="topbar">
-  <span class="brand-sign" aria-hidden="true"><span class="l" style="--i:0">S</span><span class="l" style="--i:1">I</span><span class="l" style="--i:2">L</span><span class="l" style="--i:3">C</span><span class="l" style="--i:4">R</span><span class="l" style="--i:5">I</span><span class="l" style="--i:6">S</span><svg class="sign-star" viewBox="0 0 100 100"><defs><radialGradient id="signStarGlow"><stop offset="0" stop-color="#fff"/><stop offset=".07" stop-color="#fff"/><stop offset=".2" stop-color="#fff" stop-opacity=".45"/><stop offset=".4" stop-color="#c4963f" stop-opacity=".3"/><stop offset=".72" stop-color="#c4963f" stop-opacity="0"/></radialGradient><radialGradient id="signStarRay"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#signStarGlow)"/><g fill="url(#signStarRay)"><path d="M50 1 52.6 47.4 99 50 52.6 52.6 50 99 47.4 52.6 1 50 47.4 47.4Z"/><path d="M50 14 52.2 47.8 86 50 52.2 52.2 50 86 47.8 52.2 14 50 47.8 47.8Z" transform="rotate(45 50 50)"/><path d="M50 28 51.6 48.4 72 50 51.6 51.6 50 72 48.4 51.6 28 50 48.4 48.4Z" transform="rotate(22.5 50 50)" opacity=".55"/></g></svg></span>
+  <span class="brand-sign" aria-hidden="true"><span class="l">S</span><span class="l">I</span><span class="l">L</span><span class="l">C</span><span class="l">R</span><span class="l">I</span><span class="l">S</span><svg class="sign-star" viewBox="0 0 100 100"><defs><radialGradient id="signStarGlow"><stop offset="0" stop-color="#fff"/><stop offset=".07" stop-color="#fff"/><stop offset=".2" stop-color="#fff" stop-opacity=".45"/><stop offset=".4" stop-color="#c4963f" stop-opacity=".3"/><stop offset=".72" stop-color="#c4963f" stop-opacity="0"/></radialGradient><radialGradient id="signStarRay"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#signStarGlow)"/><g fill="url(#signStarRay)"><path d="M50 1 52.6 47.4 99 50 52.6 52.6 50 99 47.4 52.6 1 50 47.4 47.4Z"/><path d="M50 14 52.2 47.8 86 50 52.2 52.2 50 86 47.8 52.2 14 50 47.8 47.8Z" transform="rotate(45 50 50)"/><path d="M50 28 51.6 48.4 72 50 51.6 51.6 50 72 48.4 51.6 28 50 48.4 48.4Z" transform="rotate(22.5 50 50)" opacity=".55"/></g></svg></span>
   <nav class="topnav" aria-label="Fő menü">
     <a href="#rolam">Bemutatkozás</a>
     <a href="#szolgaltatasok">Szolgáltatások</a>
