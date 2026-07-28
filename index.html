@@ -182,15 +182,17 @@
     /* arany glória+szegély → a fehér csillag ELÜT a világos krémtől (sötétebb a krémnél) */
     filter:drop-shadow(0 0 1.2px rgba(150,106,42,.9)) drop-shadow(0 0 2.8px rgba(201,155,74,.45));
   }
-  .topbar.solid .sign-star{animation:signStar 2.5s ease-in-out .25s infinite;}
+  .topbar.solid .sign-star{animation:signStar 2.5s ease-in-out infinite;} /* NINCS extra delay! */
   @keyframes signStar{
-    /* A CSÚCS 50%: az utolsó „S" késleltetése 1,07s + a villanás csúcsa 7%
-       (0,175s) = 1,245s = a 2,5s-os ciklus 49,8%-a. Ez a MOZGÁS VÉGE:
-       utána gyors, tiszta lecsengés (nem hosszú elúszás). */
-    0%,44%{opacity:0;transform:scale(.55) rotate(0deg);}
-    50%{opacity:.95;transform:scale(1) rotate(10deg);}
-    72%{opacity:0;transform:scale(.85) rotate(24deg);}
-    100%{opacity:0;transform:scale(.55) rotate(0deg);}
+    /* FOLYTATÓLAGOS a söprés után – NINCS holtidő.
+       Az utolsó „S" villanása: kezd 1,07s, csúcs 1,245s.
+       A csillag már 1,10s-nél (44%) EMELKEDNI KEZD – tehát MÍG a betű
+       világosodik –, és 1,275s-nél (51%) tetőzik, közvetlenül a betű csúcsa
+       után. Korábban 0,25s extra delay volt rajta → 0,105s holtidő. */
+    0%,44%{opacity:0;transform:scale(.5) rotate(0deg);}
+    51%{opacity:.95;transform:scale(1) rotate(10deg);}
+    70%{opacity:0;transform:scale(.85) rotate(22deg);}
+    100%{opacity:0;transform:scale(.5) rotate(0deg);}
   }
   /* a köztes desktop-sávban (a menü szinte teljes szélességű) elrejtjük, hogy ne ütközzön */
   @media(min-width:820px) and (max-width:1179.98px){.brand-sign{display:none;}}
