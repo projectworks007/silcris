@@ -126,7 +126,13 @@
      tinta-csillanás fut végig rajta – mintha épp aláírná a munkáját. */
   .brand-sign{
     position:absolute;top:50%;left:max(26px,env(safe-area-inset-left,0px));
-    font-family:'Parisienne',cursive;font-size:22px;line-height:1;color:var(--gold);
+    /* A márkanév a SAJÁT betűjével – ugyanaz, mint a hero „SILCRIS" feliratán
+       (Cormorant verzál, ritkítva). Kézírásos Parisienne-nel a nagybetűk
+       összefolytak, olvashatatlan volt. A söprés+csillag animáció változatlan:
+       az a szöveg szélességétől függetlenül működik. */
+    font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;
+    letter-spacing:.22em;text-transform:uppercase;
+    line-height:1;color:var(--gold);
     white-space:nowrap;pointer-events:none;
     opacity:0;transform:translateY(-50%) translateX(-10px);
     transition:opacity .45s ease, transform .45s ease;
@@ -135,7 +141,7 @@
     text-shadow:0 0 9px rgba(169,131,60,.38), 0 0 2px rgba(201,155,74,.45);} /* enyhe arany derengés, míg görgetésnél látszik */
   /* az arany fény, ami finoman, lassan végigsöpör az aláíráson – enyhe, fényes csillogás (nem pulzálás!) */
   .brand-sign::after{
-    content:"Szántai Szilvia";position:absolute;left:0;top:0;pointer-events:none;
+    content:"SILCRIS";position:absolute;left:0;top:0;pointer-events:none;
     background:linear-gradient(100deg,transparent 42%,rgba(255,249,230,.9) 50%,transparent 58%);
     -webkit-background-clip:text;background-clip:text;
     -webkit-text-fill-color:transparent;color:transparent;
@@ -151,7 +157,10 @@
   }
   /* ✦ a söprés VÉGÉN egy fényes CSILLAG-BURST (valódi SVG, sok sugár) villan az utolsó „a" csücskén */
   .sign-star{
-    position:absolute;right:-11px;top:-4px;width:28px;height:28px;
+    /* right: a csillag SZÉLESSÉGÉNÉL nagyobb negatív érték kell, különben
+       ráfekszik az utolsó betűre. A ritkított (letter-spacing:.22em) SILCRIS
+       felirat után -26px adja a szép, éppen csak elváló pozíciót. */
+    position:absolute;right:-26px;top:-5px;width:28px;height:28px;
     opacity:0;transform:scale(.35);transform-origin:50% 50%;
     pointer-events:none;overflow:visible;
     /* arany glória+szegély → a fehér csillag ELÜT a világos krémtől (sötétebb a krémnél) */
@@ -922,7 +931,7 @@
 <div class="page-frame" aria-hidden="true"></div>
 
 <header class="topbar">
-  <span class="brand-sign" aria-hidden="true">Szántai Szilvia<svg class="sign-star" viewBox="0 0 100 100"><defs><radialGradient id="signStarGlow"><stop offset="0" stop-color="#fff"/><stop offset=".07" stop-color="#fff"/><stop offset=".2" stop-color="#fff" stop-opacity=".45"/><stop offset=".4" stop-color="#c4963f" stop-opacity=".3"/><stop offset=".72" stop-color="#c4963f" stop-opacity="0"/></radialGradient><radialGradient id="signStarRay"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#signStarGlow)"/><g fill="url(#signStarRay)"><path d="M50 1 52.6 47.4 99 50 52.6 52.6 50 99 47.4 52.6 1 50 47.4 47.4Z"/><path d="M50 14 52.2 47.8 86 50 52.2 52.2 50 86 47.8 52.2 14 50 47.8 47.8Z" transform="rotate(45 50 50)"/><path d="M50 28 51.6 48.4 72 50 51.6 51.6 50 72 48.4 51.6 28 50 48.4 48.4Z" transform="rotate(22.5 50 50)" opacity=".55"/></g></svg></span>
+  <span class="brand-sign" aria-hidden="true">SILCRIS<svg class="sign-star" viewBox="0 0 100 100"><defs><radialGradient id="signStarGlow"><stop offset="0" stop-color="#fff"/><stop offset=".07" stop-color="#fff"/><stop offset=".2" stop-color="#fff" stop-opacity=".45"/><stop offset=".4" stop-color="#c4963f" stop-opacity=".3"/><stop offset=".72" stop-color="#c4963f" stop-opacity="0"/></radialGradient><radialGradient id="signStarRay"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#signStarGlow)"/><g fill="url(#signStarRay)"><path d="M50 1 52.6 47.4 99 50 52.6 52.6 50 99 47.4 52.6 1 50 47.4 47.4Z"/><path d="M50 14 52.2 47.8 86 50 52.2 52.2 50 86 47.8 52.2 14 50 47.8 47.8Z" transform="rotate(45 50 50)"/><path d="M50 28 51.6 48.4 72 50 51.6 51.6 50 72 48.4 51.6 28 50 48.4 48.4Z" transform="rotate(22.5 50 50)" opacity=".55"/></g></svg></span>
   <nav class="topnav" aria-label="Fő menü">
     <a href="#rolam">Bemutatkozás</a>
     <a href="#szolgaltatasok">Szolgáltatások</a>
