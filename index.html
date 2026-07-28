@@ -627,15 +627,20 @@
     border-bottom:1px dotted rgba(169,132,63,.5);transform:translateY(-.3em);
   }
   #arlista .szolg-ar{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+  /* Árlista kategória-fejléc: KÖZÉPRE ZÁRT SZERIF ALCÍM + flourish.
+     (Előtte 11,5px-es arany verzál volt balra zárva – János: „béna az
+     elrendezése, és nincs elválasztó szerepe a mérete és láthatósága miatt".
+     Most ugyanaz a minta, mint a szekció-fejléceknél: szerif cím + arany
+     flourish alatta → valódi hierarchia, látható elválasztás.) */
   .ar-kat{
-    /* A térköz a fejléc FÖLÉ kell (korábban a lista kapott margin-top:44px-et,
-       így 44px rés támadt a fejléc és a SAJÁT listája közt → a címke árván
-       lógott a sarokban). Az első fejléc előtt a szekció-fejléc ad levegőt. */
-    max-width:760px;margin:58px auto 0;padding:0 4px 14px;
-    font-family:'Jost',sans-serif;font-weight:400;font-size:11.5px;
-    letter-spacing:.28em;text-transform:uppercase;color:var(--gold-deep);
+    max-width:760px;margin:62px auto 26px;text-align:center;
   }
-  .ar-kat:first-of-type{margin-top:0;}
+  .ar-kat span{
+    display:block;font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:clamp(25px,4.6vw,31px);line-height:1.2;color:var(--cream);
+  }
+  .ar-kat .flourish{width:min(170px,42vw);margin:9px auto 0;}
+  .ar-kat:first-of-type{margin-top:8px;}
   @media(max-width:560px){#arlista .szolg-nev::after{display:none;}}
 
   /* ---------- Szolgáltatás-ikonok (arany vonalrajz) ---------- */
@@ -1077,7 +1082,7 @@
       <h2>Kezelések és áraik</h2>
     </div>
 
-    <h3 class="ar-kat rev">Sminktetoválás</h3>
+    <h3 class="ar-kat rev"><span>Sminktetoválás</span><svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg></h3>
     <div class="szolg-list rev">
       <div class="szolg-item">
         <div class="szolg-nev">Szemöldök – Soft Powder</div>
@@ -1111,7 +1116,7 @@
       </div>
     </div>
 
-    <h3 class="ar-kat rev">Korrekció és frissítés</h3>
+    <h3 class="ar-kat rev"><span>Korrekció és frissítés</span><svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg></h3>
     <div class="szolg-list rev">
       <div class="szolg-item">
         <div class="szolg-nev">Korrekció (3 hónapon belül)</div>
@@ -1135,7 +1140,7 @@
       </div>
     </div>
 
-    <h3 class="ar-kat rev">Smink és lézeres eltávolítás</h3>
+    <h3 class="ar-kat rev"><span>Smink és lézeres eltávolítás</span><svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg></h3>
     <div class="szolg-list rev">
       <div class="szolg-item">
         <div class="szolg-nev">Smink – Nappali</div>
