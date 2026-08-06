@@ -68,6 +68,7 @@
     --cream-dim:#645B4E;   /* halványabb szöveg – a mélyebb krémen is AA (≥4.5) */
     --on-gold:#332912;     /* sötét szöveg ARANY gombokon */
     --cta-h:60px;          /* ragadós mobil CTA magassága */
+    --topbar-h:74px;       /* fejléc magassága mobilon (15px padding + 44px gomb + 15px) */
     /* aliasok (a világos-szekció szabályokhoz, hogy ne törjenek) */
     --cream-bg:#F4EDDF;
     --cream-card:#FBF6EC;
@@ -125,7 +126,7 @@
   /* ✍️ KÉZJEGY: görgetéskor balra beúszik a „Szántai Szilvia" kézírás, és egy arany
      tinta-csillanás fut végig rajta – mintha épp aláírná a munkáját. */
   .brand-sign{
-    position:absolute;top:50%;left:max(26px,env(safe-area-inset-left,0px));
+    position:absolute;top:50%;left:max(26px,env(safe-area-inset-left,0px));z-index:3; /* a nyitott mobil panel FÖLÖTT */
     font-family:'Cormorant Garamond',serif;font-weight:700;font-size:23px;
     letter-spacing:.2em;text-transform:uppercase;
     /* line-height PÁROS px: a translateY(-50%) így -12px, EGÉSZ pixel (félpixelen
@@ -137,10 +138,13 @@
        pedig szín+ragyogás váltással jön (signFlash). */
     color:var(--gold-deep);
     white-space:nowrap;pointer-events:none;
-    opacity:0;transform:translateY(-50%) translateX(-10px);
-    transition:opacity .45s ease, transform .45s ease;
+    /* MINDIG látszik – a lap tetején is, a hero fölött (a fejléc bal fele addig üres volt,
+       mobilon csak a hamburger lógott a sarokban). A hero fölött CSENDES: nincs derengés,
+       és a hullám/csillanás továbbra is CSAK görgetéskor (.topbar.solid) indul. */
+    opacity:1;transform:translateY(-50%);
+    transition:text-shadow .45s ease;
   }
-  .topbar.solid .brand-sign{opacity:1;transform:translateY(-50%) translateX(0);
+  .topbar.solid .brand-sign{
     text-shadow:0 0 9px rgba(169,131,60,.38), 0 0 2px rgba(201,155,74,.45);} /* enyhe arany derengés, míg görgetésnél látszik */
   /* az arany fény, ami finoman, lassan végigsöpör az aláíráson – enyhe, fényes csillogás (nem pulzálás!) */
   /* söpör, majd pihen; a fény a 40%-nál ÉR AZ UTOLSÓ BETŰRE (bg-pos 16,67% = a fény a szöveg jobb szélén, S=2.5-ből) – ez a horgony */
@@ -280,42 +284,132 @@
   .topnav a:hover{color:var(--gold);}
   @media(min-width:820px){.topnav{display:flex;}}
 
-  /* ---------- Mobil hamburger menü ---------- */
+  /* ---------- Mobil menü: „krém függöny" ----------
+     A panel a fejléc MÖGÜL nyílik le, teljes képernyőn. A fejléc (kézjegy + gomb)
+     végig fölötte marad (z:55 > z:54), így a márkajel meg se rezdül nyitáskor. */
+
+  /* A gomb: szögletes doboz helyett arany „pecsét"-körív, ELTÉRŐ hosszú vonalakkal. */
   .nav-toggle{
-    display:none;flex-direction:column;justify-content:center;gap:5px;
-    width:44px;height:44px;padding:0 11px;cursor:pointer;
-    background:transparent;border:1px solid var(--gold-soft);
+    display:none;position:relative;z-index:3;   /* a nyitott panel FÖLÖTT marad */
+    width:44px;height:44px;padding:0;cursor:pointer;
+    background:transparent;border:none;
+    -webkit-tap-highlight-color:transparent;
   }
-  .nav-toggle span{
-    display:block;height:1px;background:var(--cream);
-    transition:transform .25s ease,opacity .25s ease;
+  .nav-toggle::before{
+    content:"";position:absolute;inset:1px;border-radius:50%;
+    border:1px solid var(--gold-soft);opacity:.55;
+    transition:opacity .3s ease, transform .3s ease;
   }
-  .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
-  .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
-  .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+  .nav-toggle[aria-expanded="true"]::before{opacity:1;transform:scale(1.05);}
+  .nav-toggle .bar{
+    position:absolute;left:11px;height:1.5px;border-radius:1px;
+    background:var(--gold-deep);
+    transition:transform .34s cubic-bezier(.22,1,.36,1), opacity .18s ease;
+  }
+  .nav-toggle .bar:nth-child(1){top:15px;width:22px;}
+  .nav-toggle .bar:nth-child(2){top:21px;width:15px;}   /* a rövid középső adja a „tervezett” érzetet */
+  .nav-toggle .bar:nth-child(3){top:27px;width:22px;}
+  /* nyitva: X – a középső nem eltűnik, hanem KIFUT jobbra (apró, de érezhető részlet) */
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(2){transform:translateX(26px);opacity:0;transition-delay:.04s;}
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
   .mobile-nav{
-    display:none;position:absolute;top:100%;left:0;right:0;
-    max-height:calc(100vh - 100px - var(--cta-h) - env(safe-area-inset-bottom));  /* fallback */
-    max-height:calc(100dvh - 100px - var(--cta-h) - env(safe-area-inset-bottom));
-    overflow-y:auto; /* fekvő telefonon is elérhető minden menüpont */
-    flex-direction:column;padding:8px 26px 16px;
-    background:#FBF6EC;border-top:1px solid rgba(169,131,60,.20);
-    border-bottom:1px solid var(--gold-soft);
-    box-shadow:0 14px 30px rgba(53,48,42,.18);
+    /* ⚠️ A .topbar (fixed + z-index:55) SAJÁT rétegkontextust nyit, ezért a panel
+       z-indexe csak a TESTVÉREIHEZ képest számít – a kézjegynek és a gombnak kell
+       nagyobb érték, hogy a panel fölött maradjanak (lásd .brand-sign / .nav-toggle). */
+    display:none;position:fixed;inset:0;z-index:1;
+    flex-direction:column;
+    background:var(--moss-3);
+    padding:calc(var(--topbar-h) + 14px) 26px calc(20px + env(safe-area-inset-bottom,0px));
+    padding-left:max(26px,env(safe-area-inset-left,0px));
+    padding-right:max(26px,env(safe-area-inset-right,0px));
+    overflow-y:auto;overscroll-behavior:contain;
+    /* FÜGGÖNY: felülről húzódik le, nem tucat opacity-fade.
+       Zárás GYORSABB (.28s) – a bezárás érezzen azonnalinak. */
+    clip-path:inset(0 0 100% 0);visibility:hidden;
+    transition:clip-path .28s cubic-bezier(.4,0,.6,1), visibility 0s linear .28s;
   }
-  .mobile-nav a{
-    text-decoration:none;font-family:'Jost',sans-serif;font-size:13px;
-    letter-spacing:.22em;text-transform:uppercase;color:var(--cream);
-    padding:14px 0;border-bottom:1px solid rgba(198,161,91,.14);
-    transition:color .2s;
+  .mobile-nav::after{ /* belső arany szegély – a lap keretének folytatása */
+    content:"";position:absolute;inset:8px;border:1px solid rgba(198,161,91,.22);
+    pointer-events:none;
   }
-  .mobile-nav a:last-child{border-bottom:none;}
-  .mobile-nav a:hover{color:var(--gold);}
+  .mobile-nav.open{
+    clip-path:inset(0 0 0 0);visibility:visible;
+    transition:clip-path .42s cubic-bezier(.22,1,.36,1);
+  }
+  /* halvány peónia-vonalrajz a háttérben: a menü a márka lapja, nem üres fehér felület */
+  .m-peony{
+    position:absolute;right:-16%;bottom:14%;width:82%;max-width:380px;
+    color:var(--gold);opacity:.07;pointer-events:none;
+  }
+  /* a linkek a fejléc és a lába KÖZÖTTI tér közepén ülnek – nem tapadnak a tetejére */
+  .m-links{
+    display:flex;flex-direction:column;flex:1 1 auto;position:relative;z-index:1;
+    justify-content:center;
+    /* `safe`: fekvő telefonon, ha a lista magasabb a helynél, a középre igazítás
+       levágná a TETEJÉT és elérhetetlenné tenné – ilyenkor felülre igazít. */
+    justify-content:safe center;
+  }
+  .m-links a{
+    position:relative;display:flex;align-items:baseline;gap:13px;
+    text-decoration:none;
+    font-family:'Cormorant Garamond',serif;font-weight:600;
+    font-size:clamp(23px,6.4vw,29px);line-height:1.24;
+    letter-spacing:.012em;color:var(--ink);
+    padding:9px 0;
+    opacity:0;transform:translateY(12px);
+    transition:opacity .4s ease, transform .4s ease, color .2s ease;
+  }
+  .m-links .n{ /* sorszám: apró arany Jost a nagy talpas betű mellett */
+    font-family:'Jost',sans-serif;font-style:normal;font-weight:500;
+    font-size:10px;letter-spacing:.16em;color:var(--gold);
+    min-width:20px;flex:0 0 auto;
+  }
+  /* aktív szekció: arany pötty a bal margón + mélyebb arany szedés */
+  .m-links a.current{color:var(--gold-deep);}
+  .m-links a.current .n{color:var(--gold-deep);}
+  .m-links a.current::before{
+    content:"";position:absolute;left:-13px;top:.85em;
+    width:5px;height:5px;border-radius:50%;background:var(--gold);
+  }
+  /* lépcsőzött beúszás – FIX késleltetések (a calc()+var() az animációban mobilon megbízhatatlan) */
+  .mobile-nav.open .m-links a{opacity:1;transform:none;}
+  .mobile-nav.open .m-links a:nth-child(1){transition-delay:.10s;}
+  .mobile-nav.open .m-links a:nth-child(2){transition-delay:.145s;}
+  .mobile-nav.open .m-links a:nth-child(3){transition-delay:.19s;}
+  .mobile-nav.open .m-links a:nth-child(4){transition-delay:.235s;}
+  .mobile-nav.open .m-links a:nth-child(5){transition-delay:.28s;}
+  .mobile-nav.open .m-links a:nth-child(6){transition-delay:.325s;}
+  .mobile-nav.open .m-links a:nth-child(7){transition-delay:.37s;}
+  /* a menü lába: hívás + foglalás – mobilon a látogatók zöme ezt akarja */
+  .m-foot{
+    position:relative;z-index:1;margin-top:auto;padding-top:18px;
+    border-top:1px solid var(--gold-soft);
+    display:flex;flex-direction:column;gap:11px;
+    opacity:0;transform:translateY(12px);
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .mobile-nav.open .m-foot{opacity:1;transform:none;transition-delay:.42s;}
+  .m-foot .m-label{
+    font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-dim);
+  }
+  .m-foot .m-tel{
+    font-family:'Cormorant Garamond',serif;font-weight:600;font-size:25px;
+    letter-spacing:.03em;color:var(--gold-deep);text-decoration:none;line-height:1.1;
+  }
+  .m-foot .btn{margin-top:5px;text-align:center;}
   @media(max-width:819.98px){
-    .topbar{justify-content:flex-end;} /* hamburger jobbra */
-    .nav-toggle{display:flex;}
-    .mobile-nav.open{display:flex;}
+    .topbar{justify-content:flex-end;} /* a gomb jobbra – a kézjegy balra abszolút ül */
+    .nav-toggle{display:block;}
+    .mobile-nav{display:flex;}
+    /* nyitott menü alatt a fejléc tömör, a panel színével azonos → folytonos felület */
+    .topbar.menu-open{background:var(--moss-3);box-shadow:none;border-bottom-color:transparent;}
+    /* a ragadós CTA (z:60) átütne a panelen */
+    body.menu-lock .mobile-cta{transform:translateY(100%);visibility:hidden;}
   }
+  body.menu-lock{overflow:hidden;}
 
   /* ---------- Hero ---------- */
   .hero{
@@ -920,6 +1014,11 @@
     .hero-bg.flash{opacity:var(--herobg-op,.42);}
     .spark{animation:none;opacity:0;}
     .mobile-cta{transition:none;}
+    /* mobil menü: nyílik/zárul, de mozgás nélkül */
+    .mobile-nav,.mobile-nav.open{transition:none;}
+    .m-links a,.m-foot{transition:none;}
+    .mobile-nav.open .m-links a,.mobile-nav.open .m-foot{transition-delay:0s;}
+    .nav-toggle .bar{transition:none;}
   }
 </style>
 <noscript><style>.rev{opacity:1;transform:none;}</style></noscript>
@@ -969,16 +1068,25 @@
     <a href="#kapcsolat">Kapcsolat</a>
   </nav>
   <button class="nav-toggle" aria-expanded="false" aria-label="Menü" aria-controls="mobil-menu">
-    <span></span><span></span><span></span>
+    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
   </button>
   <nav class="mobile-nav" id="mobil-menu" aria-label="Mobil menü">
-    <a href="#rolam">Bemutatkozás</a>
-    <a href="#szolgaltatasok">Szolgáltatások</a>
-    <a href="#arlista">Árlista</a>
-    <a href="#munkaim">Galéria</a>
-    <a href="#gyik">GYIK</a>
-    <a href="#foglalas">Időpontfoglalás</a>
-    <a href="#kapcsolat">Kapcsolat</a>
+    <!-- háttér-vonalrajz: ugyanaz a peónia, ami a szekció-elválasztókban (nincs új képfájl) -->
+    <svg class="m-peony" viewBox="-58 -34 116 68" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 -19.5 Q12.5 -30.2 13.8 -13.8 Q30.2 -12.5 19.5 0 Q30.2 12.5 13.8 13.8 Q12.5 30.2 0 19.5 Q-12.5 30.2 -13.8 13.8 Q-30.2 12.5 -19.5 0 Q-30.2 -12.5 -13.8 -13.8 Q-12.5 -30.2 0 -19.5Z"/><path d="M6.5 -11.3 Q20.4 -11.8 13 0 Q20.4 11.8 6.5 11.3 Q0 23.6 -6.5 11.3 Q-20.4 11.8 -13 0 Q-20.4 -11.8 -6.5 -11.3 Q0 -23.6 6.5 -11.3Z"/><path d="M0 -7.4 Q8.7 -11.9 7 -2.3 Q14 4.6 4.3 6 Q0 14.7 -4.3 6 Q-14 4.6 -7 -2.3 Q-8.7 -11.9 0 -7.4Z"/><circle cx="0" cy="0" r="2.5"/><path d="M-25 13C-36 17-47 13-54 5C-45-1-32 3-25 13"/><path d="M25 13C36 17 47 13 54 5C45-1 32 3 25 13"/></svg>
+    <div class="m-links">
+      <a href="#rolam"><i class="n" aria-hidden="true">01</i>Bemutatkozás</a>
+      <a href="#szolgaltatasok"><i class="n" aria-hidden="true">02</i>Szolgáltatások</a>
+      <a href="#arlista"><i class="n" aria-hidden="true">03</i>Árlista</a>
+      <a href="#munkaim"><i class="n" aria-hidden="true">04</i>Galéria</a>
+      <a href="#gyik"><i class="n" aria-hidden="true">05</i>GYIK</a>
+      <a href="#foglalas"><i class="n" aria-hidden="true">06</i>Időpontfoglalás</a>
+      <a href="#kapcsolat"><i class="n" aria-hidden="true">07</i>Kapcsolat</a>
+    </div>
+    <div class="m-foot">
+      <span class="m-label">Hívj bátran</span>
+      <a class="m-tel" href="tel:+36305415415">06 30 541 5415</a>
+      <a class="btn btn-gold" href="#foglalas">Időpontot foglalok</a>
+    </div>
   </nav>
 </header>
 
@@ -1459,17 +1567,56 @@
   } else {
     document.querySelectorAll('.rev').forEach(el=>el.classList.add('in'));
   }
-  // Mobil hamburger menü: nyitás/zárás, link-kattintásra zárás
-  const toggle=document.querySelector('.nav-toggle');
-  const menu=document.querySelector('.mobile-nav');
-  toggle.addEventListener('click',()=>{
-    const open=menu.classList.toggle('open');
-    toggle.setAttribute('aria-expanded',open);
-  });
-  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
-    menu.classList.remove('open');
-    toggle.setAttribute('aria-expanded','false');
-  }));
+  /* Mobil menü: teljes képernyős függöny. Nyitva a lap görgetése zárolva, a háttér
+     rejtett a képernyőolvasónak, Esc/link zár, a fókusz a menüben marad. */
+  (function(){
+    const toggle=document.querySelector('.nav-toggle');
+    const menu=document.querySelector('.mobile-nav');
+    const topbar=document.querySelector('.topbar');
+    if(!toggle||!menu) return;
+    const links=[].slice.call(menu.querySelectorAll('a'));
+    const bg=[].slice.call(document.querySelectorAll('main,footer'));
+    let open=false;
+
+    /* melyik szekciónál állunk – NYITÁSKOR egyszer számoljuk (nincs folyamatos figyelő) */
+    function markCurrent(){
+      let cur=null;
+      links.forEach(a=>{
+        a.classList.remove('current');
+        const id=a.getAttribute('href')||'';
+        if(id.charAt(0)!=='#'||id.length<2) return;
+        const t=document.querySelector(id);
+        if(t && t.getBoundingClientRect().top <= innerHeight*0.4) cur=a;
+      });
+      if(cur) cur.classList.add('current');
+    }
+    function setOpen(v){
+      open=v;
+      menu.classList.toggle('open',v);
+      toggle.setAttribute('aria-expanded',v?'true':'false');
+      if(topbar) topbar.classList.toggle('menu-open',v);
+      document.body.classList.toggle('menu-lock',v);
+      bg.forEach(el=>{ v ? el.setAttribute('aria-hidden','true') : el.removeAttribute('aria-hidden'); });
+      /* ⚠️ A fókuszt EGY KÉPKOCKÁVAL később kell adni: a panel `visibility:hidden`-ből
+         nyílik, és a focus() a stílus újraszámítása ELŐTT még rejtett elemre menne
+         (leteszteltem: enélkül a fókusz a body-n maradt). */
+      if(v){ markCurrent(); requestAnimationFrame(function(){ if(links[0]) links[0].focus({preventScroll:true}); }); }
+      else { toggle.focus({preventScroll:true}); }
+    }
+    toggle.addEventListener('click',()=>setOpen(!open));
+    links.forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+    document.addEventListener('keydown',function(e){
+      if(!open) return;
+      if(e.key==='Escape'){ e.preventDefault(); setOpen(false); return; }
+      if(e.key!=='Tab') return;
+      const f=[toggle].concat(links);                 // fókusz-csapda: gomb + linkek körben
+      const i=f.indexOf(document.activeElement);
+      if(e.shiftKey && i<=0){ e.preventDefault(); f[f.length-1].focus(); }
+      else if(!e.shiftKey && i===f.length-1){ e.preventDefault(); f[0].focus(); }
+    });
+    /* desktopra szélesedéskor ne maradjon zárolva a lap */
+    window.addEventListener('resize',function(){ if(open && innerWidth>=820) setOpen(false); });
+  })();
 
   /* Galéria lightbox: nagy nézet, ‹›/nyíl/swipe lapozás, Esc/X/háttér zárás, fókusz-csapda */
   (function(){
