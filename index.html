@@ -573,9 +573,8 @@
     font-size:clamp(30px,5.2vw,44px);
     font-size:min(clamp(30px,5.2vw,44px),5.6svh);
     /* Az Allura hajszálvékony vonala miatt a felirat „elveszett” a mozgalmas hero-fotón:
-       hajszálnyi vastagítás + krém derengés → elválik a háttértől, olvashatóbb. */
+       hajszálnyi vastagítás → elválik a háttértől. A derengést lásd a --accent-glow-nál. */
     -webkit-text-stroke:.4px currentColor;
-    text-shadow:0 0 9px rgba(255,252,244,.7);
     color:var(--accent);margin-bottom:6px;
   }
   h1{
@@ -633,7 +632,7 @@
   .eszkoz-cap{padding:20px 22px 24px;}
   .eszkoz-cap h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:22px;
     color:#1E2A24;margin-bottom:6px;}
-  .eszkoz-cap p{font-size:14.5px;color:var(--ink-dim);}
+  .eszkoz-cap p{font-size:16px;font-weight:400;color:var(--ink-dim);}
   .eyebrow{
     font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;
     color:var(--gold-deep);margin-bottom:14px;font-weight:400;
@@ -733,13 +732,30 @@
   .rolam-text p{color:var(--cream-dim);margin-bottom:16px;max-width:52ch;}
   .rolam-text p strong{color:var(--cream);font-weight:400;}
   /* kézírásos kiemelt idézet a Rólam szövegben */
+  /* Az idézet az oldal URALKODÓ betűjével (Cormorant), KÖZÉPRE zárva – a kézírásos
+     szedés itt elütött. Az arany vonal a bal oldalról a szöveg alá került (középre
+     igazítva már nem működne oldalt). */
   .pull-quote{
-    font-family:'Allura',cursive;font-size:clamp(23px,3.4vw,31px);line-height:1.3;
-    color:var(--gold);margin-top:26px;max-width:26ch;position:relative;padding-left:18px;
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;
+    font-size:clamp(21px,3vw,27px);line-height:1.4;
+    color:var(--gold);margin:30px auto 0;max-width:34ch;
+    text-align:center;position:relative;padding:0 8px 18px;
   }
-  .pull-quote::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:2px;
-    background:linear-gradient(180deg,var(--gold-deep),transparent);border-radius:2px;}
+  .pull-quote::before{content:"";position:absolute;left:50%;transform:translateX(-50%);
+    bottom:0;width:64px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-deep),transparent);}
   .light .pull-quote{color:var(--gold-deep);}
+
+  /* ✨ MINDEN ZÖLD (akcens) SZÖVEG körül VASTAG ARANY PEREM, a betű alakját követve.
+     ⚠️ Miért text-shadow és nem `-webkit-text-stroke`: a text-stroke a betű
+     KÖZÉPVONALÁRA fest, tehát befelé is terjed, és a vékony (Allura) betűnél
+     felemészti a zöld magot – leteszteltem, a felirat teljesen arannyá vált.
+     A text-shadow viszont mindig a betű MÖGÉ rajzol, így a zöld kitöltés ép marad.
+     8 irány = egyenletes perem; az `em` mértékegység miatt a perem a betűmérethez
+     igazodik (44px-es aláírás és 24px-es kártyacím is arányos).
+     (Az arany DERENGÉS nem működött: krémen világos a világoson – beleolvadt.) */
+  /* (A zöld szövegek körüli arany DERENGÉS és PEREM is megbukott: krém alapon az arany
+     mindig világos marad, ezért nem emel ki – a kiemelést a FELÜLET adja, nem a betű.) */
 
   /* ---------- Szolgáltatások ---------- */
   /* a sötét (nem-világos) szekciók lágyabb erdőzöldet kapnak, hogy az összkép ne legyen olyan sötét */
@@ -758,9 +774,9 @@
     font-family:'Cormorant Garamond',serif;font-size:clamp(18px,4vw,22px);color:var(--gold-deep);
     white-space:nowrap;align-self:start;
   }
-  .szolg-desc{grid-column:1;color:var(--cream-dim);font-size:14.5px;max-width:52ch;}
+  .szolg-desc{grid-column:1;color:var(--cream-dim);font-size:16px;font-weight:400;max-width:52ch;}
   .szolg-note{
-    text-align:center;margin-top:26px;font-size:13px;color:var(--cream-dim);
+    text-align:center;margin-top:26px;font-size:14px;color:var(--cream-dim);
     font-style:italic;
   }
   @media(max-width:560px){
@@ -822,7 +838,24 @@
 
   /* ---------- Szolgáltatás-ikonok (arany vonalrajz) ---------- */
   #szolgaltatasok .szolg-nev{display:flex;align-items:center;gap:14px;}
-  .szolg-ikon{width:32px;height:32px;flex:none;color:var(--gold-deep);}
+  /* A Szolgáltatásoknál NINCS rajzolt ikon: a vonalas SVG-ikonok kétszer is „gagyi”
+     minősítést kaptak (VENOM-motívumok, majd itt), és az eszközök nem is feleltek meg
+     a szövegnek. Helyettük TIPOGRÁFIA: a menüben bevált arany sorszámozás. */
+  #szolgaltatasok .szolg-list{counter-reset:szolg;}
+  #szolgaltatasok .szolg-item{counter-increment:szolg;}
+  #szolgaltatasok .szolg-nev{display:flex;align-items:baseline;gap:14px;}
+  #szolgaltatasok .szolg-nev::before{
+    content:counter(szolg,decimal-leading-zero);
+    font-family:'Jost',sans-serif;font-weight:500;font-size:10px;
+    letter-spacing:.16em;color:var(--gold);flex:0 0 auto;
+  }
+  /* alszolgáltatás-fejléc a Sminktetoválás alatt (kettőspont helyett külön sorban) */
+  .szolg-desc .alcim{
+    display:block;margin-top:14px;
+    font-family:'Cormorant Garamond',serif;font-weight:500;font-size:19px;
+    color:var(--ink);letter-spacing:.01em;line-height:1.3;
+  }
+  .szolg-desc .alcim:first-child{margin-top:0;}
 
   /* ---------- Galéria: magazin-elrendezés (egy nagy + kisebbek) ---------- */
   .galeria .slot.feature{grid-column:span 2;aspect-ratio:3/2;}
@@ -840,11 +873,17 @@
     border:1px solid rgba(198,161,91,.2);padding:28px 24px;
     background:var(--moss-3);
   }
+  /* A zöld cím kiemelése ALÁVONÁSSAL (nem a betűn ülő effekttel: a derengés és a
+     perem is megbukott, mert krém alapon az arany mindig világos marad). */
   .tudni h3{
     font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;
-    margin-bottom:10px;color:var(--accent);
+    color:var(--accent);position:relative;padding-bottom:12px;margin-bottom:14px;
   }
-  .tudni p{font-size:14.5px;color:var(--cream-dim);}
+  .tudni h3::after{
+    content:"";position:absolute;left:0;bottom:0;width:42px;height:2px;
+    background:linear-gradient(90deg,var(--gold-deep),rgba(169,131,60,.15));
+  }
+  .tudni p{font-size:15.5px;font-weight:400;color:var(--cream-dim);}
 
   /* ---------- Galéria ---------- */
   .munkak-head{text-align:center;max-width:56ch;margin:0 auto 50px;}
@@ -914,6 +953,14 @@
     border:1px solid var(--gold-soft);padding:clamp(52px,7vw,78px) clamp(24px,5vw,54px);
     position:relative;background:var(--moss-3);
     box-shadow:0 22px 60px rgba(53,48,42,.06);
+  }
+  /* A foglalás („Időpontfoglalás”) és a foglaló-ablak („Hamarosan”) felirata az oldal
+     URALKODÓ betűjével – kézírásos szedésben elütött. A hero ALÁÍRÁSA marad Allura:
+     az valódi kézjegy, ez viszont csak szekció-felirat. */
+  #foglalas .hero-script,.book-modal .hero-script{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;
+    font-size:clamp(21px,3vw,27px);
+    -webkit-text-stroke:0;letter-spacing:.02em;
   }
   .foglalas-box h2{font-size:clamp(30px,5.4vw,46px);}
   .foglalas-box .btn-gold{padding:17px 40px;font-size:13.5px;}
@@ -985,7 +1032,7 @@
     color:var(--gold);font-size:26px;font-weight:300;line-height:1;
   }
   .faq details[open] summary::after{content:"–";}
-  .faq details p{padding:0 4px 24px;color:var(--cream-dim);font-size:14.5px;max-width:66ch;}
+  .faq details p{padding:0 4px 24px;color:var(--cream-dim);font-size:16px;font-weight:400;max-width:66ch;}
 
   /* ---------- Ragadós mobil CTA ---------- */
   .mobile-cta{display:none;}
@@ -1194,22 +1241,24 @@
     </div>
     <div class="szolg-list rev">
       <div class="szolg-item">
-        <div class="szolg-nev"><svg class="szolg-ikon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21C10 12 19 9 28.5 11.6"/><path d="M4 21C11 16.6 20 14.2 28.5 11.6"/></svg>Sminktetoválás</div>
-        <p class="szolg-desc"><strong style="color:var(--cream);font-weight:400;">Szemöldök:</strong>
-           Soft Powder (lágy satír) és Hard Powder (erős satír).<br>
-           <strong style="color:var(--cream);font-weight:400;">Szemhéj:</strong>
-           szempillatő-sűrítés, tusvonal és ombre tusvonal.<br>
-           <strong style="color:var(--cream);font-weight:400;">Ajak:</strong>
-           teljes satír – dús, egészséges színű ajkak.</p>
+        <div class="szolg-nev">Sminktetoválás</div>
+        <div class="szolg-desc">
+          <span class="alcim">Szemöldök</span>
+          Soft Powder (lágy satír) és Hard Powder (erős satír)
+          <span class="alcim">Szemhéj</span>
+          Szempillatő-sűrítés, tusvonal és ombre tusvonal
+          <span class="alcim">Ajak</span>
+          Teljes satír – dús, egészséges színű ajkak
+        </div>
       </div>
       <div class="szolg-item">
-        <div class="szolg-nev"><svg class="szolg-ikon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3.5v5.6"/><path d="M12.6 9.6h6.8L16 18.4z"/><path d="M6 23.4h20"/><path d="M9.8 19.6 8.2 18"/><path d="M22.2 19.6 23.8 18"/></svg>Lézeres eltávolítás</div>
+        <div class="szolg-nev">Lézeres eltávolítás</div>
         <p class="szolg-desc">Segítek megszabadulni a megfakult vagy elszíneződött régi
            tetoválástól – biztonságos lézerrel halványítjuk vagy távolítjuk el, hogy tiszta
            lappal indulhassunk. Az alkalmak számát és az árat a konzultáción egyeztetjük.</p>
       </div>
       <div class="szolg-item">
-        <div class="szolg-nev"><svg class="szolg-ikon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26.4 5.6 20 12"/><path d="M19.2 11.2l1.9 1.9"/><path d="M18.4 12.9 8.6 22.7c-1.3 1.3-2 2.9-2.4 4.6 1.7-.4 3.3-1.1 4.6-2.4l9.8-9.8z"/><path d="M6.2 27.3 4 29.5"/></svg>Smink</div>
+        <div class="szolg-nev">Smink</div>
         <p class="szolg-desc">Nappali, alkalmi, próba és menyasszonyi smink –
            a hétköznaptól a legnagyobb napodig, mindig az alkalomra hangolva.</p>
       </div>
