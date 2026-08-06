@@ -766,6 +766,20 @@
     padding:26px 4px;border-bottom:1px solid rgba(198,161,91,.18);
   }
   .szolg-item:first-child{border-top:1px solid rgba(198,161,91,.18);}
+
+  /* SZOLGÁLTATÁSOK = három ZÁRT KÁRTYA (az árlista ugyanezeket az osztályokat használja,
+     ezért minden itteni szabály #szolgaltatasok-ra szűkítve). Előtte egymás alatti lista
+     volt: az első tétel felsorolás, a másik kettő szövegtömb → széteső ritmus. */
+  #szolgaltatasok .szolg-list{display:grid;gap:16px;max-width:1040px;}
+  @media(min-width:820px){
+    #szolgaltatasok .szolg-list{grid-template-columns:repeat(3,1fr);}
+  }
+  #szolgaltatasok .szolg-item{
+    display:block;padding:30px 26px;background:var(--moss-3);
+    border:1px solid rgba(198,161,91,.28);
+  }
+  #szolgaltatasok .szolg-item:first-child{border-top:1px solid rgba(198,161,91,.28);}
+  #szolgaltatasok .szolg-desc{max-width:none;}
   .szolg-nev{
     font-family:'Cormorant Garamond',serif;font-size:clamp(20px,4.5vw,24px);font-weight:500;
   }
@@ -840,13 +854,13 @@
   /* A Szolgáltatásoknál NINCS rajzolt ikon: a vonalas SVG-ikonok kétszer is „gagyi”
      minősítést kaptak (VENOM-motívumok, majd itt), és az eszközök nem is feleltek meg
      a szövegnek. Helyettük TIPOGRÁFIA: a menüben bevált arany sorszámozás. */
-  #szolgaltatasok .szolg-list{counter-reset:szolg;}
-  #szolgaltatasok .szolg-item{counter-increment:szolg;}
-  #szolgaltatasok .szolg-nev{display:flex;align-items:baseline;gap:14px;}
-  #szolgaltatasok .szolg-nev::before{
-    content:counter(szolg,decimal-leading-zero);
-    font-family:'Jost',sans-serif;font-weight:500;font-size:10px;
-    letter-spacing:.16em;color:var(--gold);flex:0 0 auto;
+  /* Kártya-ikonok. A KORÁBBIAK azért buktak, mert (1) primitív rajzok voltak és
+     (2) az ábrázolt eszköz nem felelt meg a szövegnek. Ezek nagyítva lettek
+     megítélve: szem+szemöldök / fogyó pigmentfolt fénnyel / sminkecset. */
+  #szolgaltatasok .szolg-nev{display:block;}
+  .szolg-ikon{
+    display:block;width:40px;height:40px;color:var(--gold-deep);
+    margin-bottom:12px;
   }
   /* alszolgáltatás-fejléc a Sminktetoválás alatt (kettőspont helyett külön sorban) */
   .szolg-desc .alcim{
@@ -1228,6 +1242,10 @@
 <div class="ornament-band"><svg viewBox="0 0 420 80" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 40h118"/><path d="M296 40h118"/><circle cx="128" cy="40" r="2.2" fill="currentColor" stroke="none"/><circle cx="292" cy="40" r="2.2" fill="currentColor" stroke="none"/><g transform="translate(210,40)"><path d="M0 -19.5 Q12.5 -30.2 13.8 -13.8 Q30.2 -12.5 19.5 0 Q30.2 12.5 13.8 13.8 Q12.5 30.2 0 19.5 Q-12.5 30.2 -13.8 13.8 Q-30.2 12.5 -19.5 0 Q-30.2 -12.5 -13.8 -13.8 Q-12.5 -30.2 0 -19.5Z"/><path d="M6.5 -11.3 Q20.4 -11.8 13 0 Q20.4 11.8 6.5 11.3 Q0 23.6 -6.5 11.3 Q-20.4 11.8 -13 0 Q-20.4 -11.8 -6.5 -11.3 Q0 -23.6 6.5 -11.3Z"/><path d="M0 -7.4 Q8.7 -11.9 7 -2.3 Q14 4.6 4.3 6 Q0 14.7 -4.3 6 Q-14 4.6 -7 -2.3 Q-8.7 -11.9 0 -7.4Z"/><circle cx="0" cy="0" r="2.5"/><path d="M-25 13C-36 17-47 13-54 5C-45-1-32 3-25 13"/><path d="M25 13C36 17 47 13 54 5C45-1 32 3 25 13"/></g></svg></div>
 
 <!-- ================= SZOLGÁLTATÁSOK ================= -->
+<!-- A kártya-ikonok a Phosphor Icons „light" készletéből valók (MIT licenc,
+     phosphoricons.com) – szándékosan NEM kézzel rajzoltak: a saját rajzok
+     nagyítva primitívnek hatottak. -->
+
 <section id="szolgaltatasok" class="szolg">
   <div class="wrap">
     <div class="szolg-head rev">
@@ -1239,7 +1257,7 @@
     </div>
     <div class="szolg-list rev">
       <div class="szolg-item">
-        <div class="szolg-nev">Sminktetoválás</div>
+        <div class="szolg-nev"><svg class="szolg-ikon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M252.24,107.76a6,6,0,0,0-8.48,0L193.41,158.1a2,2,0,0,1-2.82,0L105.9,73.41a2,2,0,0,1,0-2.82l50.34-50.35a6,6,0,0,0-8.48-8.48L97.41,62.1A14,14,0,0,0,95.7,79.81L73.41,102.1a14,14,0,0,0,0,19.8l6.1,6.1L19.76,187.76a6,6,0,0,0,2.34,9.93l72,24a6,6,0,0,0,6.14-1.45L136,184.49l6.1,6.1a14,14,0,0,0,19.8,0l22.28-22.29a14,14,0,0,0,17.72-1.71l50.34-50.35A6,6,0,0,0,252.24,107.76ZM94.38,209.14,35.11,189.38,88,136.49,127.51,176Zm59-27a2,2,0,0,1-2.82,0l-10.35-10.34h0l-48-48h0L81.9,113.41a2,2,0,0,1,0-2.82L104,88.49,175.51,160Z"/></svg><span>Sminktetoválás</span></div>
         <div class="szolg-desc">
           <span class="alcim">Szemöldök</span>
           Soft Powder (lágy satír) és Hard Powder (erős satír)
@@ -1250,13 +1268,13 @@
         </div>
       </div>
       <div class="szolg-item">
-        <div class="szolg-nev">Lézeres eltávolítás</div>
+        <div class="szolg-nev"><svg class="szolg-ikon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M196.89,130.94,144.4,111.6,125.06,59.11a13.92,13.92,0,0,0-26.12,0L79.6,111.6,27.11,130.94a13.92,13.92,0,0,0,0,26.12L79.6,176.4l19.34,52.49a13.92,13.92,0,0,0,26.12,0L144.4,176.4l52.49-19.34a13.92,13.92,0,0,0,0-26.12Zm-4.15,14.86-55.08,20.3a6,6,0,0,0-3.56,3.56l-20.3,55.08a1.92,1.92,0,0,1-3.6,0L89.9,169.66a6,6,0,0,0-3.56-3.56L31.26,145.8a1.92,1.92,0,0,1,0-3.6l55.08-20.3a6,6,0,0,0,3.56-3.56l20.3-55.08a1.92,1.92,0,0,1,3.6,0l20.3,55.08a6,6,0,0,0,3.56,3.56l55.08,20.3a1.92,1.92,0,0,1,0,3.6ZM146,40a6,6,0,0,1,6-6h18V16a6,6,0,0,1,12,0V34h18a6,6,0,0,1,0,12H182V64a6,6,0,0,1-12,0V46H152A6,6,0,0,1,146,40ZM246,88a6,6,0,0,1-6,6H230v10a6,6,0,0,1-12,0V94H208a6,6,0,0,1,0-12h10V72a6,6,0,0,1,12,0V82h10A6,6,0,0,1,246,88Z"/></svg><span>Lézeres eltávolítás</span></div>
         <p class="szolg-desc">Segítek megszabadulni a megfakult vagy elszíneződött régi
            tetoválástól – biztonságos lézerrel halványítjuk vagy távolítjuk el, hogy tiszta
            lappal indulhassunk. Az alkalmak számát és az árat a konzultáción egyeztetjük.</p>
       </div>
       <div class="szolg-item">
-        <div class="szolg-nev">Smink</div>
+        <div class="szolg-nev"><svg class="szolg-ikon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,26c-20.8,0-44.11,11.41-69.3,33.9C136.62,76.06,121,94.9,110.3,109A58,58,0,0,0,34,164c0,32.07-20.43,46.39-21.35,47A6,6,0,0,0,16,222H92a58,58,0,0,0,55-76.3c14.08-10.67,32.92-26.32,49.08-44.4C218.59,76.11,230,52.8,230,32A6,6,0,0,0,224,26ZM92,210H30.65C37.92,200.85,46,185.78,46,164a46,46,0,1,1,46,46Zm29.49-95.91c3.6-4.67,7.88-10,12.71-15.69a78.17,78.17,0,0,1,23.4,23.4c-5.67,4.83-11,9.11-15.69,12.71A58.38,58.38,0,0,0,121.49,114.09Zm45.2-.3a90.24,90.24,0,0,0-24.48-24.48C163.05,66.46,191,42,217.56,38.44,214,65,189.54,93,166.69,113.79Z"/></svg><span>Smink</span></div>
         <p class="szolg-desc">Nappali, alkalmi, próba és menyasszonyi smink –
            a hétköznaptól a legnagyobb napodig, mindig az alkalomra hangolva.</p>
       </div>
