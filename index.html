@@ -324,7 +324,10 @@
     padding:calc(var(--topbar-h) + 14px) 26px calc(20px + env(safe-area-inset-bottom,0px));
     padding-left:max(26px,env(safe-area-inset-left,0px));
     padding-right:max(26px,env(safe-area-inset-right,0px));
-    overflow-y:auto;overscroll-behavior:contain;
+    /* ⚠️ overflow-X:HIDDEN kötelező: a panel egy VIEWPORTON TÚL lógó gyereke (a peónia-vízjel)
+       iOS Safariban KITERJESZTI a layout viewportot → az egész lap jobbra-balra húzhatóvá vált,
+       és a fixed fejléc is elcsúszott vele. Chrome ezt elnyeli, ezért csak telefonon látszott. */
+    overflow:hidden auto;overscroll-behavior:contain;
     /* FÜGGÖNY: felülről húzódik le, nem tucat opacity-fade.
        Zárás GYORSABB (.28s) – a bezárás érezzen azonnalinak. */
     clip-path:inset(0 0 100% 0);visibility:hidden;
@@ -339,8 +342,10 @@
     transition:clip-path .42s cubic-bezier(.22,1,.36,1);
   }
   /* halvány peónia-vonalrajz a háttérben: a menü a márka lapja, nem üres fehér felület */
+  /* A vízjel VÉGIG a panelen BELÜL marad (right:0) – kilógó doboz nélkül nincs, ami
+     iOS-en vízszintes mozgást okozhatna. A felső overflow-clip a második biztosíték. */
   .m-peony{
-    position:absolute;right:-16%;bottom:14%;width:82%;max-width:380px;
+    position:absolute;right:0;bottom:12%;width:76%;max-width:340px;
     color:var(--gold);opacity:.07;pointer-events:none;
   }
   /* a linkek a fejléc és a lába KÖZÖTTI tér közepén ülnek – nem tapadnak a tetejére */
