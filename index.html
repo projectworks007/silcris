@@ -932,6 +932,31 @@
   .galeria .slot:hover .zoom-cue,.galeria .slot:focus-visible .zoom-cue{opacity:1;transform:none;}
   .galeria .slot .zoom-cue svg{width:16px;height:16px;}
 
+  /* ---------- Galéria kategória-fülek (2026-09-19): egyszerre egy kategória látszik, rendes rácsban.
+     Flex + fix csempeszélesség: a páratlan utolsó kép KÖZÉPRE kerül, nem lóg balra. ---------- */
+  .gal-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 26px;margin:-18px 0 34px;}
+  .gal-tabs [role="tab"]{
+    background:none;border:0;cursor:pointer;padding:10px 2px;position:relative;
+    font-family:'Jost',sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--cream-dim);transition:color .2s;
+  }
+  .gal-tabs [role="tab"]::after{
+    content:"";position:absolute;left:50%;bottom:2px;width:0;height:2px;transform:translateX(-50%);
+    background:var(--gold-deep);transition:width .25s ease;
+  }
+  .gal-tabs [role="tab"]:hover{color:var(--gold-deep);}
+  .gal-tabs [role="tab"][aria-selected="true"]{color:var(--gold-deep);font-weight:500;}
+  .gal-tabs [role="tab"][aria-selected="true"]::after{width:100%;}
+  .gal-tabs [role="tab"]:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+  @media(max-width:420px){.gal-tabs{gap:4px 16px;}.gal-tabs [role="tab"]{letter-spacing:.12em;}}
+  .galeria.kat{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;}
+  .galeria.kat .slot{width:calc((100% - 14px)/2);}
+  @media(min-width:760px){
+    .galeria.kat{gap:18px;}
+    .galeria.kat .slot{width:calc((100% - 2*18px)/3);}
+    .galeria.sminkek .slot{width:calc((100% - 3*18px)/4);}
+  }
+
   /* ---------- Lightbox (galéria nagyban) – arany keret, mohazöld háttér ---------- */
   .lightbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
     padding:clamp(14px,4vw,48px);background:rgba(9,20,16,.94);opacity:0;transition:opacity .28s ease;}
@@ -1443,16 +1468,47 @@
       <h2>Ízelítő a munkáimból</h2>
       <svg class="flourish" viewBox="0 0 280 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><line x1="44" y1="20" x2="112" y2="20"/><line x1="168" y1="20" x2="236" y2="20"/><circle cx="40" cy="20" r="2" fill="currentColor" stroke="none"/><circle cx="240" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M112 20 C120 12 128 13 132 19"/><path d="M168 20 C160 28 152 27 148 21"/><path d="M140 5 C135 12 135 17 140 21 C145 17 145 12 140 5 Z"/><path d="M140 21 C132 16 124 17 120 22 C127 25 135 24 140 21 Z"/><path d="M140 21 C148 16 156 17 160 22 C153 25 145 24 140 21 Z"/></svg>
     </div>
-    <div class="galeria rev stagger">
-      <button type="button" class="slot feature" data-label="Munka · 1" aria-label="Nagyítás: Telt, piros ajkak és hangsúlyos, sötét szemöldök"><img src="images/munka-1.jpg" width="568" height="1000" loading="lazy" alt="Telt, piros ajkak és hangsúlyos, sötét szemöldök"></button>
-      <button type="button" class="slot" data-label="Munka · 2" aria-label="Nagyítás: Sűrű, íves szemöldök-sminktetoválás közelről, közvetlenül a kezelés után"><img src="images/munka-2.jpg" width="800" height="1000" loading="lazy" alt="Sűrű, íves szemöldök-sminktetoválás közelről, közvetlenül a kezelés után"></button>
-      <button type="button" class="slot" data-label="Munka · 3" aria-label="Nagyítás: Puha, formázott szemöldök és kék szemhéjvonal"><img src="images/munka-3.jpg" width="750" height="1000" loading="lazy" alt="Puha, formázott szemöldök és kék szemhéjvonal"></button>
-      <button type="button" class="slot" data-label="Munka · 4" aria-label="Nagyítás: Szemöldök-sminktetoválás – előtte és utána"><img src="images/munka-4.jpg" width="1400" height="751" loading="lazy" alt="Szemöldök-sminktetoválás – előtte és utána"></button>
-      <button type="button" class="slot" data-label="Munka · 5" aria-label="Nagyítás: Ajak-sminktetoválás – előtte (fent) és utána (lent)"><img src="images/munka-5.jpg" width="562" height="1000" loading="lazy" alt="Ajak-sminktetoválás – előtte (fent) és utána (lent)"></button>
-      <button type="button" class="slot" data-label="Munka · 6" aria-label="Nagyítás: Alkalmi smink három nézetben"><img src="images/munka-6.jpg" width="562" height="1000" loading="lazy" alt="Alkalmi smink három nézetben"></button>
-      <button type="button" class="slot" data-label="Munka · 7" aria-label="Nagyítás: Szemöldök-sminktetoválás – előtte (fent) és utána (lent)"><img src="images/munka-7.jpg" width="562" height="1000" loading="lazy" alt="Szemöldök-sminktetoválás – előtte (fent) és utána (lent)"></button>
-      <button type="button" class="slot" data-label="Munka · 8" aria-label="Nagyítás: Alkalmi smink csillogó szemhéjjal és korall ajkakkal, két nézetben"><img src="images/munka-8.jpg" width="562" height="1000" loading="lazy" alt="Alkalmi smink csillogó szemhéjjal és korall ajkakkal, két nézetben"></button>
-      <button type="button" class="slot" data-label="Munka · 9" aria-label="Nagyítás: Íves szemöldök-sminktetoválás közelről, közvetlenül a kezelés után"><img src="images/munka-9.jpg" width="800" height="1000" loading="lazy" alt="Íves szemöldök-sminktetoválás közelről, közvetlenül a kezelés után"></button>
+    <div class="gal-tabs" role="tablist" aria-label="Galéria kategóriái">
+      <button type="button" role="tab" id="gtab-ajak" aria-controls="gpanel-ajak" aria-selected="true">Ajak</button>
+      <button type="button" role="tab" id="gtab-szemoldok" aria-controls="gpanel-szemoldok" aria-selected="false" tabindex="-1">Szemöldök</button>
+      <button type="button" role="tab" id="gtab-szemhej" aria-controls="gpanel-szemhej" aria-selected="false" tabindex="-1">Szemhéj</button>
+      <button type="button" role="tab" id="gtab-smink" aria-controls="gpanel-smink" aria-selected="false" tabindex="-1">Smink</button>
+    </div>
+    <div class="gal-panel" id="gpanel-ajak" role="tabpanel" aria-labelledby="gtab-ajak">
+      <div class="galeria kat rev stagger">
+          <button type="button" class="slot" data-label="Ajak · 1" aria-label="Nagyítás: Ajak-sminktetoválás oldalnézetből"><img src="images/gal-ajak-1.jpg" width="825" height="1100" loading="lazy" alt="Ajak-sminktetoválás oldalnézetből"></button>
+          <button type="button" class="slot" data-label="Ajak · 2" aria-label="Nagyítás: Ajak- és szemöldök-sminktetoválás – előtte (fent) és utána (lent)"><img src="images/gal-ajak-2.jpg" width="619" height="1100" loading="lazy" alt="Ajak- és szemöldök-sminktetoválás – előtte (fent) és utána (lent)"></button>
+          <button type="button" class="slot" data-label="Ajak · 3" aria-label="Nagyítás: Ajak-sminktetoválás – előtte (fent) és utána (lent)"><img src="images/gal-ajak-3.jpg" width="651" height="1100" loading="lazy" alt="Ajak-sminktetoválás – előtte (fent) és utána (lent)"></button>
+          <button type="button" class="slot" data-label="Ajak · 4" aria-label="Nagyítás: Ajak-sminktetoválás közelről, lágy korall árnyalatban"><img src="images/gal-ajak-4.jpg" width="824" height="1100" loading="lazy" alt="Ajak-sminktetoválás közelről, lágy korall árnyalatban"></button>
+          <button type="button" class="slot" data-label="Ajak · 5" aria-label="Nagyítás: Telt, piros ajak-sminktetoválás"><img src="images/gal-ajak-5.jpg" width="1100" height="1003" loading="lazy" alt="Telt, piros ajak-sminktetoválás"></button>
+      </div>
+    </div>
+    <div class="gal-panel" id="gpanel-szemoldok" role="tabpanel" aria-labelledby="gtab-szemoldok" hidden>
+      <div class="galeria kat rev stagger">
+          <button type="button" class="slot" data-label="Szemöldök · 1" aria-label="Nagyítás: Szemöldök-sminktetoválás – előtte (fent) és utána (lent)"><img src="images/gal-szemoldok-1.jpg" width="619" height="1100" loading="lazy" alt="Szemöldök-sminktetoválás – előtte (fent) és utána (lent)"></button>
+          <button type="button" class="slot" data-label="Szemöldök · 2" aria-label="Nagyítás: Formázott szemöldök-sminktetoválás"><img src="images/gal-szemoldok-2.jpg" width="825" height="1100" loading="lazy" alt="Formázott szemöldök-sminktetoválás"></button>
+          <button type="button" class="slot" data-label="Szemöldök · 3" aria-label="Nagyítás: Lágy, természetes hatású szemöldök-sminktetoválás"><img src="images/gal-szemoldok-3.jpg" width="825" height="1100" loading="lazy" alt="Lágy, természetes hatású szemöldök-sminktetoválás"></button>
+          <button type="button" class="slot" data-label="Szemöldök · 4" aria-label="Nagyítás: Szemöldök- és ajak-sminktetoválás – előtte (fent) és utána (lent)"><img src="images/gal-szemoldok-4.jpg" width="619" height="1100" loading="lazy" alt="Szemöldök- és ajak-sminktetoválás – előtte (fent) és utána (lent)"></button>
+          <button type="button" class="slot" data-label="Szemöldök · 5" aria-label="Nagyítás: Szemöldök-sminktetoválás közelről – előtte (fent) és utána (lent)"><img src="images/gal-szemoldok-5.jpg" width="1100" height="1100" loading="lazy" alt="Szemöldök-sminktetoválás közelről – előtte (fent) és utána (lent)"></button>
+      </div>
+    </div>
+    <div class="gal-panel" id="gpanel-szemhej" role="tabpanel" aria-labelledby="gtab-szemhej" hidden>
+      <div class="galeria kat rev stagger">
+          <button type="button" class="slot" data-label="Szemhéj · 1" aria-label="Nagyítás: Tusvonal-sminktetoválás közelről"><img src="images/gal-szemhej-1.jpg" width="824" height="1100" loading="lazy" alt="Tusvonal-sminktetoválás közelről"></button>
+          <button type="button" class="slot" data-label="Szemhéj · 2" aria-label="Nagyítás: Tusvonal-sminktetoválás közelről, csukott szemen"><img src="images/gal-szemhej-2.jpg" width="543" height="1100" loading="lazy" alt="Tusvonal-sminktetoválás közelről, csukott szemen"></button>
+      </div>
+    </div>
+    <div class="gal-panel" id="gpanel-smink" role="tabpanel" aria-labelledby="gtab-smink" hidden>
+      <div class="galeria kat sminkek rev stagger">
+          <button type="button" class="slot" data-label="Smink · 1" aria-label="Nagyítás: Alkalmi smink oldalnézetből"><img src="images/gal-smink-1.jpg" width="825" height="1100" loading="lazy" alt="Alkalmi smink oldalnézetből"></button>
+          <button type="button" class="slot" data-label="Smink · 2" aria-label="Nagyítás: Alkalmi smink barnás, füstös szemhéjjal"><img src="images/gal-smink-2.jpg" width="825" height="1100" loading="lazy" alt="Alkalmi smink barnás, füstös szemhéjjal"></button>
+          <button type="button" class="slot" data-label="Smink · 3" aria-label="Nagyítás: Smink – előtte és utána, egymás mellett"><img src="images/gal-smink-3.jpg" width="1100" height="894" loading="lazy" alt="Smink – előtte és utána, egymás mellett"></button>
+          <button type="button" class="slot" data-label="Smink · 4" aria-label="Nagyítás: Hangsúlyos, sötét füstös szemsmink"><img src="images/gal-smink-4.jpg" width="554" height="1100" loading="lazy" alt="Hangsúlyos, sötét füstös szemsmink"></button>
+          <button type="button" class="slot" data-label="Smink · 5" aria-label="Nagyítás: Smink gyöngyös hajdísszel – előtte és utána"><img src="images/gal-smink-5.jpg" width="1100" height="1100" loading="lazy" alt="Smink gyöngyös hajdísszel – előtte és utána"></button>
+          <button type="button" class="slot" data-label="Smink · 6" aria-label="Nagyítás: Smink – előtte és utána"><img src="images/gal-smink-6.jpg" width="1100" height="1100" loading="lazy" alt="Smink – előtte és utána"></button>
+          <button type="button" class="slot" data-label="Smink · 7" aria-label="Nagyítás: Alkalmi smink két nézetből"><img src="images/gal-smink-7.jpg" width="1100" height="1005" loading="lazy" alt="Alkalmi smink két nézetből"></button>
+      </div>
+    </div>
     </div>
   </div>
 </section>
@@ -1639,6 +1695,26 @@
     } else { start(); }
   })();
 
+  // Galéria kategória-fülek (ARIA tabs: kattintás + balra/jobbra/Home/End nyíl)
+  (function(){
+    const tabs=Array.from(document.querySelectorAll('.gal-tabs [role="tab"]'));
+    function valaszt(t,fokusz){
+      tabs.forEach(x=>{
+        const on=x===t; x.setAttribute('aria-selected',on); x.tabIndex=on?0:-1;
+        const p=document.getElementById(x.getAttribute('aria-controls')); p.hidden=!on;
+        if(on){ const g=p.querySelector('.rev'); if(g) g.classList.add('in'); }
+      });
+      if(fokusz) t.focus();
+    }
+    tabs.forEach((t,i)=>{
+      t.addEventListener('click',()=>valaszt(t,false));
+      t.addEventListener('keydown',e=>{
+        const n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key];
+        if(n===undefined) return; e.preventDefault(); valaszt(tabs[(n+tabs.length)%tabs.length],true);
+      });
+    });
+  })();
+
   // Hiányzó képek: elegáns helykitöltő (galéria-gombnál letiltás + nagyító-jel el)
   document.querySelectorAll('.slot img').forEach(img=>{
     const box=img.closest('.slot');
@@ -1738,7 +1814,7 @@
     let items=[], cur=0, lastFocus=null, hideT=null;
     function render(){ const it=items[cur]; lbImg.src=it.src; lbImg.alt=it.alt; lbCounter.textContent=(cur+1)+' / '+items.length; }
     function open(slot){
-      const jok=elo();
+      const jok=elo().filter(s=>s.closest('.galeria')===slot.closest('.galeria')); /* lapozás csak a saját kategórián belül */
       items=jok.map(s=>{const i=s.querySelector('img');return {src:i.getAttribute('src'), alt:i.getAttribute('alt')||''};});
       if(!items.length) return;
       cur=Math.max(0, jok.indexOf(slot));
