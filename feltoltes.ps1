@@ -2,6 +2,9 @@
 # Inditas: jobb klikk -> "Futtatas PowerShell-lel", vagy a terminalban: .\feltoltes.ps1
 # Csak azokat a fajlokat tolti fel, amik a legutobbi feltoltes ota megvaltoztak.
 # A jelszot a curl kerdezi be, a script SEHOL nem tarolja el.
+# .\feltoltes.ps1 -Igen  -> nem kerdez ra a "Mehet?"-re, rogton a jelszot keri.
+
+param([switch]$Igen)
 
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
@@ -50,8 +53,10 @@ if ($torlendo.Count -gt 0) {
     $torlendo | ForEach-Object { Write-Host "   $_" }
 }
 Write-Host ""
-$valasz = Read-Host "Mehet? (i/n)"
-if ($valasz -notmatch '^(i|I|y|Y)$') { Write-Host "Megszakitva."; exit 0 }
+if (-not $Igen) {
+    $valasz = Read-Host "Mehet? (i/n)"
+    if ($valasz -notmatch '^(i|I|y|Y)$') { Write-Host "Megszakitva."; exit 0 }
+}
 
 # --- 5. Egyetlen curl-hivas: igy a jelszot csak EGYSZER kell begepelni ---
 $argumentumok = @('-u', $Felhasznalo, '--ftp-create-dirs')
